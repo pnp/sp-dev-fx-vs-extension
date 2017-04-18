@@ -117,7 +117,7 @@ namespace Framework.VSIX
                 componentName = WebPartInputForm.ComponentName;
                 componentDescription = WebPartInputForm.ComponentDescription;
                 commandString = WebPartInputForm.CommandString;
-                showWindow = UserInputForm.ShowWindow;
+                showWindow = WebPartInputForm.ShowWindow;
 
                 try
                 {

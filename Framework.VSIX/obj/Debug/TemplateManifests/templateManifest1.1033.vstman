@@ -1,0 +1,21 @@
+﻿<VSTemplateManifest Version="1.0" Locale="1033" xmlns="http://schemas.microsoft.com/developer/vstemplatemanifest/2015">
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>CSharp\Office/SharePoint\SharePoint Framework\1033\Framework.WebPart</RelativePathOnDisk>
+    <TemplateFileName>Framework.WebPart.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>SPFx Web Part Project</Name>
+        <Description>SharePoint Framework Web Part</Description>
+        <Icon>Framework.WebPart.ico</Icon>
+        <ProjectType>CSharp</ProjectType>
+        <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+        <SortOrder>1000</SortOrder>
+        <TemplateID>257cf6a8-0a18-454a-a767-79aadef96d09</TemplateID>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>MyWebPart</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+</VSTemplateManifest>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>SPFx Web Part</Name>
+    <Description>SharePoint Framework Web Part</Description>
+    <Icon>Framework.WebPart.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>257cf6a8-0a18-454a-a767-79aadef96d09</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>MyWebPart</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.csproj" TargetFileName="$safeprojectname$.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="version.txt">version.txt</ProjectItem>
+    </Project>
+    <CustomParameters>
+      <CustomParameter Name="$SolutionName$" Value="MySolution"/>
+      <CustomParameter Name="$Framework$" Value="none"/>
+      <CustomParameter Name="$ComponentName$" Value="MyWebPart"/>
+      <CustomParameter Name="$ComponentDescription$" Value="SharePoint Framework Web Part"/>
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>Framework.VSIX, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=32dc2f71f129b85d</Assembly>
+    <FullClassName>Framework.VSIX.WizardImplementation</FullClassName>
+  </WizardExtension>
+</VSTemplate>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>SPFx Web Part</Name>
+    <Description>SharePoint Framework Web Part</Description>
+    <Icon>Framework.WebPart.Item.ico</Icon>
+    <TemplateID>db2af22d-5451-4039-942c-ba6306d26d68</TemplateID>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <DefaultName>MyWebPart</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$ComponentName$.log">WebPart.log</ProjectItem>
+    <CustomParameters>
+      <CustomParameter Name="$ComponentName$" Value="MyWebPart"/>
+      <CustomParameter Name="$ComponentDescription$" Value="SharePoint Framework Web Part"/>
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>Framework.VSIX, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=32dc2f71f129b85d</Assembly>
+    <FullClassName>Framework.VSIX.WebPartItemWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

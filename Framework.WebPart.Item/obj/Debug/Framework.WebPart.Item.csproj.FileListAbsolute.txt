@@ -1,0 +1,10 @@
+C:\Development\SPFx\ProjectTemplates\Framework.Templates\Framework.WebPart.Item\bin\Debug\ItemTemplates\CSharp\Office\SharePoint\SharePoint Framework\1033\Framework.WebPart.Item.zip
+C:\Development\SPFx\ProjectTemplates\Framework.Templates\Framework.WebPart.Item\obj\Debug\Framework.WebPart.Item.csprojResolveAssemblyReference.cache
+C:\Development\SPFx\ProjectTemplates\Framework.Templates\Framework.WebPart.Item\obj\Debug\CSharp\Office\SharePoint\SharePoint Framework\1033\Framework.WebPart.Item.zip
+C:\Development\SPFx\ProjectTemplates\Framework.Templates\Framework.WebPart.Item\obj\Debug\Framework.WebPart.Item.dll
+C:\Development\SPFx\ProjectTemplates\Framework.Templates\Framework.WebPart.Item\obj\Debug\Framework.WebPart.Item.pdb
+C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.WebPart.Item\bin\Debug\ItemTemplates\CSharp\Office\SharePoint\SharePoint Framework\1033\Framework.WebPart.Item.zip
+C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.WebPart.Item\obj\Debug\Framework.WebPart.Item.csprojResolveAssemblyReference.cache
+C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.WebPart.Item\obj\Debug\CSharp\Office\SharePoint\SharePoint Framework\1033\Framework.WebPart.Item.zip
+C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.WebPart.Item\obj\Debug\Framework.WebPart.Item.dll
+C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.WebPart.Item\obj\Debug\Framework.WebPart.Item.pdb
