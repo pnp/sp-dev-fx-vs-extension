@@ -14,7 +14,7 @@ This repo contains the source code and releases of a Visual Studio extension for
 * [Set up your Office 365 tenant](https://dev.office.com/sharepoint/docs/spfx/set-up-your-developer-tenant)
 * [Set up your development environment](https://dev.office.com/sharepoint/docs/spfx/set-up-your-development-environment)
 * Install the extension in Visual Studio:
-  * Download the .vsix file from the repo [Releases page](./releases/latest)
+  * Download the .vsix file from the repo [Releases page](../../releases/latest)
   * Ensure Visual Studio is closed
   * Double-click on the downloaded .vsix file
 
