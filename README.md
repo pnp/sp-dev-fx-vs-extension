@@ -21,7 +21,7 @@ This repo contains the source code and releases of a Visual Studio extension for
 # Getting Started
 A templated named 'SPFx Web Part Project' is added to the template list in Visual Studio. Select this template to invoke a wizard that runs the Yeoman generator and creates the project.
 
-Additional details are in the [Getting Started guide](./wiki/Getting-Started).
+Additional details are in the [Getting Started guide](../../wiki/Getting-Started).
 
 ## Contributions
 
