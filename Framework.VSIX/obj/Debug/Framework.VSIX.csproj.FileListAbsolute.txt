@@ -40,3 +40,5 @@ C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.VSIX\obj\
 C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.VSIX\obj\Debug\Framework.VSIX.dll
 C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.VSIX\obj\Debug\Framework.VSIX.pdb
 C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.VSIX\obj\Debug\extension.vsixmanifest
+C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.VSIX\bin\Debug\Resources\Extension.ico
+C:\Development\SPFx\ProjectTemplates\PnP\Framework.Templates\Framework.VSIX\bin\Debug\SPFxProjectExtension.png
