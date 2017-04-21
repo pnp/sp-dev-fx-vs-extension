@@ -25,10 +25,6 @@ bld/
 # Visual Studio 2015 cache/options directory
 .vs/
 
-# MSTest test Results
-[Tt]est[Rr]esult*/
-[Bb]uild[Ll]og.*
-
 # NUNIT
 *.VisualState.xml
 TestResult.xml
