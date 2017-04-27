@@ -12,7 +12,7 @@
     <ProvideDefaultName>true</ProvideDefaultName>
   </TemplateData>
   <TemplateContent>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$ComponentName$.log">WebPart.log</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$ComponentName$.log" OpenInEditor="true">WebPart.log</ProjectItem>
     <CustomParameters>
       <CustomParameter Name="$ComponentName$" Value="MyWebPart"/>
       <CustomParameter Name="$ComponentDescription$" Value="SharePoint Framework Web Part"/>

@@ -7,6 +7,7 @@ using System.Drawing;
 using Microsoft.CSharp;
 using EnvDTE;
 using System.IO;
+using System.Text;
 using System.Globalization;
 using System.Threading;
 using System.Resources;
@@ -23,20 +24,14 @@ namespace Framework.VSIX
         private string commandString;
         private string showWindow;
 
-        // This method is called before opening any item that   
-        // has the OpenInEditor attribute.  
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
         }
 
         public void ProjectFinishedGenerating(Project project)
-        {
-            
-
+        {           
         }
 
-        // This method is only called for item templates,  
-        // not for project templates.  
         public void ProjectItemFinishedGenerating(ProjectItem
             projectItem)
         {
@@ -46,6 +41,8 @@ namespace Framework.VSIX
 
             commandString = commandString.Replace("$ComponentName$", componentName);
             commandString = commandString.Replace("$ComponentDescription$", componentDescription);
+
+            StringBuilder outputText = new StringBuilder();
 
             using (var proc = new System.Diagnostics.Process())
             {
@@ -63,18 +60,21 @@ namespace Framework.VSIX
                     proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     proc.Start();
 
-                    using (StreamWriter sw = File.AppendText(logFile))
-                    {
-                        var s = string.Empty;
-                        while ((s = proc.StandardOutput.ReadLine()) != null)
-                        {
-                            sw.WriteLine(s);
-                        }
-                    }
-
                     proc.StandardInput.Flush();
                     proc.StandardInput.WriteLine("exit");
                     proc.StandardInput.Flush();
+
+                    using (StreamReader reader = proc.StandardOutput)
+                    {
+                        string result = reader.ReadToEnd();
+                        outputText.Append(result);
+                    }
+
+                    using (StreamReader reader = proc.StandardError)
+                    {
+                        string result = reader.ReadToEnd();
+                        outputText.Append(result);
+                    }
                 }
                 else
                 {
@@ -83,6 +83,11 @@ namespace Framework.VSIX
                 }
 
                 proc.WaitForExit();
+
+                using (StreamWriter sw = File.AppendText(logFile))
+                {
+                    sw.Write(outputText);
+                }
             }
 
             string[] files = Directory.GetFiles(projectDir, "*.*", SearchOption.AllDirectories);
@@ -100,7 +105,6 @@ namespace Framework.VSIX
             }
         }
 
-        // This method is called after the project is created.  
         public void RunFinished()
         {
 
@@ -139,8 +143,6 @@ namespace Framework.VSIX
             }
         }
 
-        // This method is only called for item templates,  
-        // not for project templates.  
         public bool ShouldAddProjectItem(string filePath)
         {
             return true;
@@ -181,25 +183,25 @@ namespace Framework.VSIX
             tabProps.Click += TabProps_Click;
 
             Label _label3 = new Label();
-            _label3.Location = new System.Drawing.Point(10, 40);
+            _label3.Location = new System.Drawing.Point(10, 20);
             _label3.Size = new System.Drawing.Size(200, 20);
             _label3.Text = Global.Form_ComponentName;
             tabProps.Controls.Add(_label3);
 
             _componentName = new TextBox();
-            _componentName.Location = new System.Drawing.Point(10, 60);
+            _componentName.Location = new System.Drawing.Point(10, 40);
             _componentName.Size = new System.Drawing.Size(400, 20);
             _componentName.TextChanged += _componentName_TextChanged;
             tabProps.Controls.Add(_componentName);
 
             Label _label4 = new Label();
-            _label4.Location = new System.Drawing.Point(10, 90);
+            _label4.Location = new System.Drawing.Point(10, 70);
             _label4.Size = new System.Drawing.Size(200, 20);
             _label4.Text = Global.Form_ComponentDescription;
             tabProps.Controls.Add(_label4);
 
             _componentDescription = new TextBox();
-            _componentDescription.Location = new System.Drawing.Point(10, 110);
+            _componentDescription.Location = new System.Drawing.Point(10, 90);
             _componentDescription.Size = new System.Drawing.Size(400, 20);
             _componentDescription.TextChanged += _componentDescription_TextChanged;
             tabProps.Controls.Add(_componentDescription);
@@ -214,13 +216,13 @@ namespace Framework.VSIX
             tabAdv.Click += TabAdv_Click;
 
             Label _label6 = new Label();
-            _label6.Location = new System.Drawing.Point(10, 40);
+            _label6.Location = new System.Drawing.Point(10, 20);
             _label6.Size = new System.Drawing.Size(200, 20);
             _label6.Text = Global.Form_CommandString;
             tabAdv.Controls.Add(_label6);
 
             _commandString = new TextBox();
-            _commandString.Location = new System.Drawing.Point(10, 60);
+            _commandString.Location = new System.Drawing.Point(10, 40);
             _commandString.Size = new System.Drawing.Size(560, 200);
             _commandString.Multiline = true;
             _commandString.ScrollBars = ScrollBars.Vertical;
@@ -228,7 +230,7 @@ namespace Framework.VSIX
             tabAdv.Controls.Add(_commandString);
 
             Label _label7 = new Label();
-            _label7.Location = new System.Drawing.Point(10, 265);
+            _label7.Location = new System.Drawing.Point(10, 245);
             _label7.Size = new System.Drawing.Size(500, 40);
             _label7.Text = Global.Form_AdvancedTab_CommandDescription;
             _label7.MaximumSize = new System.Drawing.Size(500, 40);
@@ -236,7 +238,7 @@ namespace Framework.VSIX
             tabAdv.Controls.Add(_label7);
 
             _showWindow = new CheckBox();
-            _showWindow.Location = new System.Drawing.Point(10, 290);
+            _showWindow.Location = new System.Drawing.Point(10, 270);
             _showWindow.Checked = false;
             _showWindow.Text = Global.Form_ShowCommandWIndow;
             _showWindow.AutoSize = true;

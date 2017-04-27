@@ -16,7 +16,7 @@
   <TemplateContent>
     <Project File="WebPart.csproj" TargetFileName="$safeprojectname$.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="generator.log">generator.log</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="generator.log" OpenInEditor="true">generator.log</ProjectItem>
     </Project>
     <CustomParameters>
       <CustomParameter Name="$SolutionName$" Value="MySolution"/>

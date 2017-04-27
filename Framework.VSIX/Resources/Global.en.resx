@@ -171,6 +171,12 @@
   <data name="Form_ShowCommandWIndow" xml:space="preserve">
     <value>Show command window</value>
   </data>
+  <data name="Form_SkipInstall" xml:space="preserve">
+    <value>Do not automatically install dependencies (skip "npm install" command)</value>
+  </data>
+  <data name="Form_SkipInstall_Flag" xml:space="preserve">
+    <value>--skip-install</value>
+  </data>
   <data name="Form_SolutionName" xml:space="preserve">
     <value>Solution Name:</value>
   </data>
@@ -178,9 +184,9 @@
     <value>yo @microsoft/sharepoint --componentName "{0}" --componentDescription "{1}"</value>
   </data>
   <data name="Yeoman_Project_CommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}"</value>
+    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" {4}</value>
   </data>
   <data name="Yeoman_Project_DefaultCommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}"</value>
+    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" {4}</value>
   </data>
 </root>

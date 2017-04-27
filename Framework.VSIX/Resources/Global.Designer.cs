@@ -223,6 +223,24 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do not automatically install dependencies (skip &quot;npm install&quot; command).
+        /// </summary>
+        internal static string Form_SkipInstall {
+            get {
+                return ResourceManager.GetString("Form_SkipInstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --skip-install.
+        /// </summary>
+        internal static string Form_SkipInstall_Flag {
+            get {
+                return ResourceManager.GetString("Form_SkipInstall_Flag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Solution Name:.
         /// </summary>
         internal static string Form_SolutionName {
@@ -241,7 +259,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot;.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; {4}.
         /// </summary>
         internal static string Yeoman_Project_CommandString {
             get {
@@ -250,7 +268,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot;.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; {4}.
         /// </summary>
         internal static string Yeoman_Project_DefaultCommandString {
             get {

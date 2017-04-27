@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TemplateWizard;
 using System.Windows.Forms;
 using EnvDTE;
 using System.IO;
+using System.Text;
 using System.Resources;
 using Framework.VSIX.Resources;
 using System.Reflection;
@@ -24,7 +25,7 @@ namespace Framework.VSIX
         private string logFile;
         private string commandString;
         private string showWindow;
-        private Project currentProject;
+        private string skipInstall;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -37,11 +38,13 @@ namespace Framework.VSIX
             commandString = commandString.Replace("$ComponentName$", componentName);
             commandString = commandString.Replace("$ComponentDescription$", componentDescription);
 
+            StringBuilder outputText = new StringBuilder();
+
             using (var proc = new System.Diagnostics.Process())
             {
                 proc.StartInfo.WorkingDirectory = solutionDir;
                 proc.StartInfo.FileName = @"cmd.exe";
-
+                
                 if (showWindow == "false")
                 {
                     proc.StartInfo.Arguments = string.Format(@" /c  {0}", commandString);
@@ -53,18 +56,21 @@ namespace Framework.VSIX
                     proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     proc.Start();
 
-                    using (StreamWriter sw = File.AppendText(logFile))
-                    {
-                        var s = string.Empty;
-                        while ((s = proc.StandardOutput.ReadLine()) != null)
-                        {
-                            sw.WriteLine(s);
-                        }
-                    }
-
                     proc.StandardInput.Flush();
                     proc.StandardInput.WriteLine("exit");
                     proc.StandardInput.Flush();
+
+                    using (StreamReader reader = proc.StandardOutput)
+                    {
+                        string result = reader.ReadToEnd();
+                        outputText.Append(result);
+                    }
+
+                    using (StreamReader reader = proc.StandardError)
+                    {
+                        string result = reader.ReadToEnd();
+                        outputText.Append(result);
+                    }
                 }
                 else
                 {
@@ -73,6 +79,11 @@ namespace Framework.VSIX
                 }
 
                 proc.WaitForExit();
+
+                using (StreamWriter sw = File.AppendText(logFile))
+                {
+                    sw.Write(outputText);
+                }
             }
 
             string[] files = Directory.GetFiles(projectDir, "*.*", SearchOption.AllDirectories);
@@ -108,6 +119,7 @@ namespace Framework.VSIX
             try
             {
                 inputForm = new UserInputForm();
+                inputForm.Controls["ConfigTabControl"].Controls["ConfigTabPageProps"].Controls["spfxSolutionName"].Text = replacementsDictionary["$safeprojectname$"];
                 inputForm.ShowDialog();
 
                 solutionName = UserInputForm.SolutionName;
@@ -116,6 +128,7 @@ namespace Framework.VSIX
                 componentDescription = UserInputForm.ComponentDescription;
                 commandString = UserInputForm.CommandString;
                 showWindow = UserInputForm.ShowWindow;
+                skipInstall = UserInputForm.SkipInstall;
 
                 try
                 {
@@ -124,7 +137,6 @@ namespace Framework.VSIX
                     replacementsDictionary.Remove("$ComponentName$");
                     replacementsDictionary.Remove("$ComponentDescription$");
                     replacementsDictionary.Remove("$CommandString$");
-                    replacementsDictionary.Remove("$ShowWindow$");
                 }
                 catch { }
 
@@ -133,10 +145,11 @@ namespace Framework.VSIX
                 replacementsDictionary.Add("$ComponentName$", componentName);
                 replacementsDictionary.Add("$ComponentDescription$", componentDescription);
                 replacementsDictionary.Add("$CommandString$", commandString);
-                replacementsDictionary.Add("$ShowWindow$", showWindow);
 
                 solutionDir = System.IO.Path.GetDirectoryName(replacementsDictionary["$destinationdirectory$"]);
                 projectDir = String.Format(@"{0}\{1}", solutionDir, replacementsDictionary["$safeprojectname$"]);
+                projectDir = String.Format(@"{0}\{1}", solutionDir, solutionName);
+
                 logFile = String.Format(@"{0}\generator.log", projectDir);
             }
             catch (Exception ex)
@@ -159,6 +172,8 @@ namespace Framework.VSIX
         private static string componentDescription;
         private static string commandString;
         private static string showWindow;
+        private static string skipInstall;
+        private static string skipInstallCommand = string.Empty;
         private TextBox _solutionName;
         private ComboBox _framework;
         private TextBox _componentName;
@@ -167,6 +182,7 @@ namespace Framework.VSIX
         private Button button1;
         private Button button2;
         private CheckBox _showWindow;
+        private CheckBox _skipInstall;
         ResourceManager rm = new ResourceManager("Framework.VSIX.Resources.Global", Assembly.GetExecutingAssembly());
 
 
@@ -190,25 +206,27 @@ namespace Framework.VSIX
             tabProps.Click += TabProps_Click;
 
             Label _label1 = new Label();
-            _label1.Location = new System.Drawing.Point(10, 40);
+            _label1.Location = new System.Drawing.Point(10, 20);
             _label1.Size = new System.Drawing.Size(200, 20);
             _label1.Text = Global.Form_SolutionName;
             tabProps.Controls.Add(_label1);
 
             _solutionName = new TextBox();
-            _solutionName.Location = new System.Drawing.Point(10, 60);
+            _solutionName.Name = "spfxSolutionName";
+            _solutionName.Location = new System.Drawing.Point(10, 40);
             _solutionName.Size = new System.Drawing.Size(400, 20);
             _solutionName.TextChanged += _solutionName_TextChanged;
+            _solutionName.Enabled = false;
             tabProps.Controls.Add(_solutionName);
 
             Label _label2 = new Label();
-            _label2.Location = new System.Drawing.Point(10, 90);
+            _label2.Location = new System.Drawing.Point(10, 70);
             _label2.Size = new System.Drawing.Size(200, 20);
             _label2.Text = Global.Form_Framework;
             tabProps.Controls.Add(_label2);
 
             _framework = new ComboBox();
-            _framework.Location = new System.Drawing.Point(10, 110);
+            _framework.Location = new System.Drawing.Point(10, 90);
             _framework.Size = new System.Drawing.Size(150, 20);
 
             Dictionary<string, string> comboSource = new Dictionary<string, string>();
@@ -224,28 +242,36 @@ namespace Framework.VSIX
             tabProps.Controls.Add(_framework);
 
             Label _label3 = new Label();
-            _label3.Location = new System.Drawing.Point(10, 140);
+            _label3.Location = new System.Drawing.Point(10, 120);
             _label3.Size = new System.Drawing.Size(400, 20);
             _label3.Text = Global.Form_ComponentName;
             tabProps.Controls.Add(_label3);
 
             _componentName = new TextBox();
-            _componentName.Location = new System.Drawing.Point(10, 160);
+            _componentName.Location = new System.Drawing.Point(10, 140);
             _componentName.Size = new System.Drawing.Size(400, 20);
             _componentName.TextChanged += _componentName_TextChanged;
             tabProps.Controls.Add(_componentName);
 
             Label _label4 = new Label();
-            _label4.Location = new System.Drawing.Point(10, 190);
+            _label4.Location = new System.Drawing.Point(10, 170);
             _label4.Size = new System.Drawing.Size(200, 20);
             _label4.Text = Global.Form_ComponentDescription;
             tabProps.Controls.Add(_label4);
 
             _componentDescription = new TextBox();
-            _componentDescription.Location = new System.Drawing.Point(10, 210);
+            _componentDescription.Location = new System.Drawing.Point(10, 190);
             _componentDescription.Size = new System.Drawing.Size(400, 20);
             _componentDescription.TextChanged += _componentDescription_TextChanged;
             tabProps.Controls.Add(_componentDescription);
+
+            _skipInstall = new CheckBox();
+            _skipInstall.Location = new System.Drawing.Point(10, 230);
+            _skipInstall.Checked = false;
+            _skipInstall.Text = Global.Form_SkipInstall;
+            _skipInstall.AutoSize = true;
+            _skipInstall.CheckedChanged += _skipInstall_CheckedChanged;
+            tabProps.Controls.Add(_skipInstall);
 
             tabCtrl.TabPages.Add(tabProps);
 
@@ -257,21 +283,21 @@ namespace Framework.VSIX
             tabAdv.Click += TabAdv_Click;
 
             Label _label6 = new Label();
-            _label6.Location = new System.Drawing.Point(10, 40);
+            _label6.Location = new System.Drawing.Point(10, 20);
             _label6.Size = new System.Drawing.Size(200, 20);
             _label6.Text = Global.Form_CommandString;
             tabAdv.Controls.Add(_label6);
 
             _commandString = new TextBox();
-            _commandString.Location = new System.Drawing.Point(10, 60);
+            _commandString.Location = new System.Drawing.Point(10, 40);
             _commandString.Size = new System.Drawing.Size(560, 200);
             _commandString.Multiline = true;
             _commandString.ScrollBars = ScrollBars.Vertical;
-            _commandString.Text = string.Format(Global.Yeoman_Project_DefaultCommandString, solutionName, "none", componentName, componentDescription);
+            _commandString.Text = string.Format(Global.Yeoman_Project_DefaultCommandString, solutionName, "none", componentName, componentDescription, skipInstallCommand);
             tabAdv.Controls.Add(_commandString);
 
             Label _label7 = new Label();
-            _label7.Location = new System.Drawing.Point(10, 265);
+            _label7.Location = new System.Drawing.Point(10, 245);
             _label7.Size = new System.Drawing.Size(500, 40);
             _label7.Text = Global.Form_AdvancedTab_CommandDescription;
             _label7.MaximumSize = new System.Drawing.Size(500, 40);
@@ -279,7 +305,7 @@ namespace Framework.VSIX
             tabAdv.Controls.Add(_label7);
 
             _showWindow = new CheckBox();
-            _showWindow.Location = new System.Drawing.Point(10, 290);
+            _showWindow.Location = new System.Drawing.Point(10, 270);
             _showWindow.Checked = false;
             _showWindow.Text = Global.Form_ShowCommandWIndow;
             _showWindow.AutoSize = true;
@@ -312,6 +338,13 @@ namespace Framework.VSIX
 
         }
 
+        private void _skipInstall_CheckedChanged(object sender, EventArgs e)
+        {
+            skipInstallCommand = this._skipInstall.Checked == true ? Global.Form_SkipInstall_Flag : string.Empty;
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
+            SetSubmitState();
+        }
+
         private void Button2_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -321,28 +354,28 @@ namespace Framework.VSIX
         private void _componentDescription_TextChanged(object sender, EventArgs e)
         {
             componentDescription = _componentDescription.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription);
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
             SetSubmitState();
         }
 
         private void _componentName_TextChanged(object sender, EventArgs e)
         {
             componentName = _componentName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription);
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
             SetSubmitState();
         }
 
         private void _framework_SelectedIndexChanged(object sender, EventArgs e)
         {
             framework = ((KeyValuePair<string, string>)_framework.SelectedItem).Key;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription);
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
             SetSubmitState();
         }
 
         private void _solutionName_TextChanged(object sender, EventArgs e)
         {
             solutionName = _solutionName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription);
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
             SetSubmitState();
         }
 
@@ -416,6 +449,12 @@ namespace Framework.VSIX
             set { showWindow = value; }
         }
 
+        public static string SkipInstall
+        {
+            get { return skipInstall; }
+            set { skipInstall = value; }
+        }
+
         protected void button1_Click(object sender, EventArgs e)
         {
             solutionName = _solutionName.Text;
@@ -424,6 +463,7 @@ namespace Framework.VSIX
             framework = ((KeyValuePair<string, string>)_framework.SelectedItem).Key;
             commandString = _commandString.Text;
             showWindow = _showWindow.Checked == true ? "true" : "false";
+            skipInstall = _skipInstall.Checked == true ? "true" : "false";
             this.Close();
         }
 
