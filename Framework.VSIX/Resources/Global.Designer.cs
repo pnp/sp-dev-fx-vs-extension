@@ -61,6 +61,16 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Extension {
+            get {
+                object obj = ResourceManager.GetObject("Extension", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add switches and parameters to the Yeoman Generator commands..
         /// </summary>
         internal static string Form_AdvancedTab_CommandDescription {

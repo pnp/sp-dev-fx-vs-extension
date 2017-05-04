@@ -169,6 +169,7 @@ namespace Framework.VSIX
             this.Size = new System.Drawing.Size(600, 450);
             this.Name = Global.Form_Item_Name;
             this.Text = Global.Form_Item_Title;
+            this.Icon = Global.Extension;
 
             TabControl tabCtrl = new TabControl();
             tabCtrl.Name = "ConfigTabControl";

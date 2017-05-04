@@ -7,8 +7,8 @@
     <MoreInfo>https://github.com/SharePoint/sp-dev-fx-vs-extension</MoreInfo>
     <License>License.txt</License>
     <GettingStartedGuide>https://github.com/SharePoint/sp-dev-fx-vs-extension/wiki/Getting-Started</GettingStartedGuide>
-    <Icon>Framework.VSIX.ico</Icon>
-    <PreviewImage>SPFxProjectExtension.png</PreviewImage>
+    <Icon>Resources\Extension.ico</Icon>
+    <PreviewImage>Framework.VSIX.ico</PreviewImage>
     <Tags>SharePoint Framework</Tags>
   </Metadata>
   <Installation AllUsers="true">

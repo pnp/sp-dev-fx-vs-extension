@@ -75,7 +75,6 @@
     </Content>
     <Content Include="Resources\Extension.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="SPFxProjectExtension.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
