@@ -33,6 +33,10 @@ namespace Framework.VSIX
 
         public void ProjectFinishedGenerating(Project project)
         {
+            if (commandString == null) {
+                return;
+            }
+
             commandString = commandString.Replace("$SolutionName$", solutionName);
             commandString = commandString.Replace("$Framework$", framework);
             commandString = commandString.Replace("$ComponentName$", componentName);
@@ -120,37 +124,38 @@ namespace Framework.VSIX
             {
                 inputForm = new UserInputForm();
                 inputForm.Controls["ConfigTabControl"].Controls["ConfigTabPageProps"].Controls["spfxSolutionName"].Text = replacementsDictionary["$safeprojectname$"];
-                inputForm.ShowDialog();
-
-                solutionName = UserInputForm.SolutionName;
-                framework = UserInputForm.Framework;
-                componentName = UserInputForm.ComponentName;
-                componentDescription = UserInputForm.ComponentDescription;
-                commandString = UserInputForm.CommandString;
-                showWindow = UserInputForm.ShowWindow;
-                skipInstall = UserInputForm.SkipInstall;
-
-                try
+                if (inputForm.ShowDialog() == DialogResult.OK)
                 {
-                    replacementsDictionary.Remove("$SolutionName$");
-                    replacementsDictionary.Remove("$Framework$");
-                    replacementsDictionary.Remove("$ComponentName$");
-                    replacementsDictionary.Remove("$ComponentDescription$");
-                    replacementsDictionary.Remove("$CommandString$");
+                    solutionName = UserInputForm.SolutionName;
+                    framework = UserInputForm.Framework;
+                    componentName = UserInputForm.ComponentName;
+                    componentDescription = UserInputForm.ComponentDescription;
+                    commandString = UserInputForm.CommandString;
+                    showWindow = UserInputForm.ShowWindow;
+                    skipInstall = UserInputForm.SkipInstall;
+
+                    try
+                    {
+                        replacementsDictionary.Remove("$SolutionName$");
+                        replacementsDictionary.Remove("$Framework$");
+                        replacementsDictionary.Remove("$ComponentName$");
+                        replacementsDictionary.Remove("$ComponentDescription$");
+                        replacementsDictionary.Remove("$CommandString$");
+                    }
+                    catch { }
+
+                    replacementsDictionary.Add("$SolutionName$", solutionName);
+                    replacementsDictionary.Add("$Framework$", framework);
+                    replacementsDictionary.Add("$ComponentName$", componentName);
+                    replacementsDictionary.Add("$ComponentDescription$", componentDescription);
+                    replacementsDictionary.Add("$CommandString$", commandString);
+
+                    solutionDir = System.IO.Path.GetDirectoryName(replacementsDictionary["$destinationdirectory$"]);
+                    projectDir = String.Format(@"{0}\{1}", solutionDir, replacementsDictionary["$safeprojectname$"]);
+                    projectDir = String.Format(@"{0}\{1}", solutionDir, solutionName);
+
+                    logFile = String.Format(@"{0}\generator.log", projectDir);
                 }
-                catch { }
-
-                replacementsDictionary.Add("$SolutionName$", solutionName);
-                replacementsDictionary.Add("$Framework$", framework);
-                replacementsDictionary.Add("$ComponentName$", componentName);
-                replacementsDictionary.Add("$ComponentDescription$", componentDescription);
-                replacementsDictionary.Add("$CommandString$", commandString);
-
-                solutionDir = System.IO.Path.GetDirectoryName(replacementsDictionary["$destinationdirectory$"]);
-                projectDir = String.Format(@"{0}\{1}", solutionDir, replacementsDictionary["$safeprojectname$"]);
-                projectDir = String.Format(@"{0}\{1}", solutionDir, solutionName);
-
-                logFile = String.Format(@"{0}\generator.log", projectDir);
             }
             catch (Exception ex)
             {
@@ -318,6 +323,7 @@ namespace Framework.VSIX
             button1.Size = new System.Drawing.Size(100, 25);
             button1.Text = Global.Form_ButtonGenerate;
             button1.Click += button1_Click;
+            button1.DialogResult = DialogResult.OK;
             button1.Enabled = false;
             this.Controls.Add(button1);
 
@@ -325,7 +331,7 @@ namespace Framework.VSIX
             button2.Location = new System.Drawing.Point(475, 360);
             button2.Size = new System.Drawing.Size(100, 25);
             button2.Text = Global.Form_ButtonCancel;
-            button2.Click += Button2_Click;
+            button2.DialogResult = DialogResult.Cancel;
             this.Controls.Add(button2);
 
             Label _label5 = new Label();
@@ -343,12 +349,6 @@ namespace Framework.VSIX
             skipInstallCommand = this._skipInstall.Checked == true ? Global.Form_SkipInstall_Flag : string.Empty;
             _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
             SetSubmitState();
-        }
-
-        private void Button2_Click(object sender, EventArgs e)
-        {
-            this.Close();
-            Application.Exit();
         }
 
         private void _componentDescription_TextChanged(object sender, EventArgs e)
