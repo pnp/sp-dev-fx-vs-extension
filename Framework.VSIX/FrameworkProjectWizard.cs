@@ -26,6 +26,7 @@ namespace Framework.VSIX
         private string commandString;
         private string showWindow;
         private string skipInstall;
+        private bool formCancel;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -33,73 +34,75 @@ namespace Framework.VSIX
 
         public void ProjectFinishedGenerating(Project project)
         {
-            commandString = commandString.Replace("$SolutionName$", solutionName);
-            commandString = commandString.Replace("$Framework$", framework);
-            commandString = commandString.Replace("$ComponentName$", componentName);
-            commandString = commandString.Replace("$ComponentDescription$", componentDescription);
-
-            StringBuilder outputText = new StringBuilder();
-
-            using (var proc = new System.Diagnostics.Process())
+            if (!formCancel)
             {
-                proc.StartInfo.WorkingDirectory = solutionDir;
-                proc.StartInfo.FileName = @"cmd.exe";
-                
-                if (showWindow == "false")
+                commandString = commandString.Replace("$SolutionName$", solutionName);
+                commandString = commandString.Replace("$Framework$", framework);
+                commandString = commandString.Replace("$ComponentName$", componentName);
+                commandString = commandString.Replace("$ComponentDescription$", componentDescription);
+
+                StringBuilder outputText = new StringBuilder();
+
+                using (var proc = new System.Diagnostics.Process())
                 {
-                    proc.StartInfo.Arguments = string.Format(@" /c  {0}", commandString);
-                    proc.StartInfo.RedirectStandardInput = true;
-                    proc.StartInfo.RedirectStandardOutput = true;
-                    proc.StartInfo.RedirectStandardError = true;
-                    proc.StartInfo.CreateNoWindow = true;
-                    proc.StartInfo.UseShellExecute = false;
-                    proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    proc.Start();
+                    proc.StartInfo.WorkingDirectory = solutionDir;
+                    proc.StartInfo.FileName = @"cmd.exe";
 
-                    proc.StandardInput.Flush();
-                    proc.StandardInput.WriteLine("exit");
-                    proc.StandardInput.Flush();
-
-                    using (StreamReader reader = proc.StandardOutput)
+                    if (showWindow == "false")
                     {
-                        string result = reader.ReadToEnd();
-                        outputText.Append(result);
+                        proc.StartInfo.Arguments = string.Format(@" /c  {0}", commandString);
+                        proc.StartInfo.RedirectStandardInput = true;
+                        proc.StartInfo.RedirectStandardOutput = true;
+                        proc.StartInfo.RedirectStandardError = true;
+                        proc.StartInfo.CreateNoWindow = true;
+                        proc.StartInfo.UseShellExecute = false;
+                        proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        proc.Start();
+
+                        proc.StandardInput.Flush();
+                        proc.StandardInput.WriteLine("exit");
+                        proc.StandardInput.Flush();
+
+                        using (StreamReader reader = proc.StandardOutput)
+                        {
+                            string result = reader.ReadToEnd();
+                            outputText.Append(result);
+                        }
+
+                        using (StreamReader reader = proc.StandardError)
+                        {
+                            string result = reader.ReadToEnd();
+                            outputText.Append(result);
+                        }
+                    }
+                    else
+                    {
+                        proc.StartInfo.Arguments = string.Format(@" /k  {0}", commandString);
+                        proc.Start();
                     }
 
-                    using (StreamReader reader = proc.StandardError)
+                    proc.WaitForExit();
+
+                    using (StreamWriter sw = File.AppendText(logFile))
                     {
-                        string result = reader.ReadToEnd();
-                        outputText.Append(result);
+                        sw.Write(outputText);
                     }
                 }
-                else
-                {
-                    proc.StartInfo.Arguments = string.Format(@" /k  {0}", commandString);
-                    proc.Start();
-                }
 
-                proc.WaitForExit();
+                string[] files = Directory.GetFiles(projectDir, "*.*", SearchOption.AllDirectories);
 
-                using (StreamWriter sw = File.AppendText(logFile))
+                foreach (string file in files)
                 {
-                    sw.Write(outputText);
+                    if (!file.ToLower().Contains("node_modules") && !file.ToLower().Contains(@"\bin\") && !file.ToLower().Contains(@"\obj\") && !file.ToLower().Contains(@"\properties\"))
+                    {
+                        try
+                        {
+                            project.ProjectItems.AddFromFile(file);
+                        }
+                        catch { }
+                    }
                 }
             }
-
-            string[] files = Directory.GetFiles(projectDir, "*.*", SearchOption.AllDirectories);
-
-            foreach (string file in files)
-            {
-                if (!file.ToLower().Contains("node_modules") && !file.ToLower().Contains(@"\bin\") && !file.ToLower().Contains(@"\obj\") && !file.ToLower().Contains(@"\properties\"))
-                {
-                    try
-                    {
-                        project.ProjectItems.AddFromFile(file);
-                    }
-                    catch { }
-                }
-            }
-
         }
 
         public void ProjectItemFinishedGenerating(ProjectItem
@@ -121,36 +124,40 @@ namespace Framework.VSIX
                 inputForm = new UserInputForm();
                 inputForm.Controls["ConfigTabControl"].Controls["ConfigTabPageProps"].Controls["spfxSolutionName"].Text = replacementsDictionary["$safeprojectname$"];
                 inputForm.ShowDialog();
+                formCancel = UserInputForm.FormCancel;
 
-                solutionName = UserInputForm.SolutionName;
-                framework = UserInputForm.Framework;
-                componentName = UserInputForm.ComponentName;
-                componentDescription = UserInputForm.ComponentDescription;
-                commandString = UserInputForm.CommandString;
-                showWindow = UserInputForm.ShowWindow;
-                skipInstall = UserInputForm.SkipInstall;
-
-                try
+                if (!formCancel)
                 {
-                    replacementsDictionary.Remove("$SolutionName$");
-                    replacementsDictionary.Remove("$Framework$");
-                    replacementsDictionary.Remove("$ComponentName$");
-                    replacementsDictionary.Remove("$ComponentDescription$");
-                    replacementsDictionary.Remove("$CommandString$");
+                    solutionName = UserInputForm.SolutionName;
+                    framework = UserInputForm.Framework;
+                    componentName = UserInputForm.ComponentName;
+                    componentDescription = UserInputForm.ComponentDescription;
+                    commandString = UserInputForm.CommandString;
+                    showWindow = UserInputForm.ShowWindow;
+                    skipInstall = UserInputForm.SkipInstall;
+
+                    try
+                    {
+                        replacementsDictionary.Remove("$SolutionName$");
+                        replacementsDictionary.Remove("$Framework$");
+                        replacementsDictionary.Remove("$ComponentName$");
+                        replacementsDictionary.Remove("$ComponentDescription$");
+                        replacementsDictionary.Remove("$CommandString$");
+                    }
+                    catch { }
+
+                    replacementsDictionary.Add("$SolutionName$", solutionName);
+                    replacementsDictionary.Add("$Framework$", framework);
+                    replacementsDictionary.Add("$ComponentName$", componentName);
+                    replacementsDictionary.Add("$ComponentDescription$", componentDescription);
+                    replacementsDictionary.Add("$CommandString$", commandString);
+
+                    solutionDir = System.IO.Path.GetDirectoryName(replacementsDictionary["$destinationdirectory$"]);
+                    projectDir = String.Format(@"{0}\{1}", solutionDir, replacementsDictionary["$safeprojectname$"]);
+                    projectDir = String.Format(@"{0}\{1}", solutionDir, solutionName);
+
+                    logFile = String.Format(@"{0}\generator.log", projectDir);
                 }
-                catch { }
-
-                replacementsDictionary.Add("$SolutionName$", solutionName);
-                replacementsDictionary.Add("$Framework$", framework);
-                replacementsDictionary.Add("$ComponentName$", componentName);
-                replacementsDictionary.Add("$ComponentDescription$", componentDescription);
-                replacementsDictionary.Add("$CommandString$", commandString);
-
-                solutionDir = System.IO.Path.GetDirectoryName(replacementsDictionary["$destinationdirectory$"]);
-                projectDir = String.Format(@"{0}\{1}", solutionDir, replacementsDictionary["$safeprojectname$"]);
-                projectDir = String.Format(@"{0}\{1}", solutionDir, solutionName);
-
-                logFile = String.Format(@"{0}\generator.log", projectDir);
             }
             catch (Exception ex)
             {
@@ -174,6 +181,7 @@ namespace Framework.VSIX
         private static string showWindow;
         private static string skipInstall;
         private static string skipInstallCommand = string.Empty;
+        private static bool formCancel = false;
         private TextBox _solutionName;
         private ComboBox _framework;
         private TextBox _componentName;
@@ -347,8 +355,8 @@ namespace Framework.VSIX
 
         private void Button2_Click(object sender, EventArgs e)
         {
+            formCancel = true;
             this.Close();
-            Application.Exit();
         }
 
         private void _componentDescription_TextChanged(object sender, EventArgs e)
@@ -453,6 +461,12 @@ namespace Framework.VSIX
         {
             get { return skipInstall; }
             set { skipInstall = value; }
+        }
+
+        public static bool FormCancel
+        {
+            get { return formCancel;  }
+            set { formCancel = value; }
         }
 
         protected void button1_Click(object sender, EventArgs e)

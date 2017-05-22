@@ -39,15 +39,6 @@
     <StartProgram>C:\Windows\System32\cmd.exe</StartProgram>
     <StartArguments>/K  gulp serve</StartArguments>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="*.*" />
-    <Content Include="config\**" />
-    <Content Include="dist\**" />
-    <Content Include="lib\**" />
-    <Content Include="src\**" />
-    <Content Include="temp\**" />
-    <Content Include="typings\**" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
   </Target>
