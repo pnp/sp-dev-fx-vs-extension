@@ -27,6 +27,10 @@ A template named 'SPFx Web Part Project' is added to the template list in Visual
 
 Additional details are in the [Getting Started guide](../../wiki/Getting-Started).
 
+![SPFx Web Part Project Template in VS2017](https://github.com/SharePoint/sp-dev-fx-vs-extension/wiki/images/VS2015new.png)
+
+![Custom Project Configuration Wizard](https://github.com/SharePoint/sp-dev-fx-vs-extension/wiki/images/propertiesForm.png)
+
 ## Contributions
 
 We welcome your input on issues and suggestions for new features. We are also interested in community contributions to enhance and expand the capabilities of the extension. Let us know if you have any questions or comments.
