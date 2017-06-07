@@ -16,7 +16,7 @@ The Visual Studio Extension for SharePoint Framework wraps the command-line UI o
 * [Set up your Office 365 tenant](https://dev.office.com/sharepoint/docs/spfx/set-up-your-developer-tenant)
 * [Set up your development environment](https://dev.office.com/sharepoint/docs/spfx/set-up-your-development-environment)
 * Install the extension in Visual Studio:
-  * Download the .vsix file from the repo [Releases page](../../releases/latest) or from [Visual Studio Extension Gallery](https://marketplace.visualstudio.com/items?itemName=SharePointPnP.SPFxProjectTemplate)
+  * Download the .vsix file from the repo [Releases page](../../releases/latest) or from the [Visual Studio Extension Gallery](https://marketplace.visualstudio.com/items?itemName=SharePointPnP.SPFxProjectTemplate)
   * Ensure Visual Studio is closed
   * Double-click on the downloaded .vsix file
   * Follow the installation prompts
