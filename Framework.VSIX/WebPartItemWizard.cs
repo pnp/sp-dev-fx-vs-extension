@@ -236,7 +236,7 @@ namespace Framework.VSIX
             _commandString.Size = new System.Drawing.Size(560, 200);
             _commandString.Multiline = true;
             _commandString.ScrollBars = ScrollBars.Vertical;
-            _commandString.Text = string.Format(Global.Yeoman_Item_CommandString, componentName, componentDescription);
+            _commandString.Text = string.Format(Global.Yeoman_Item_CommandString, componentName, componentDescription, "webpart");
             tabAdv.Controls.Add(_commandString);
 
             Label _label7 = new Label();
@@ -295,14 +295,14 @@ namespace Framework.VSIX
         private void _componentDescription_TextChanged(object sender, EventArgs e)
         {
             componentDescription = _componentDescription.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Item_CommandString, componentName, componentDescription);
+            _commandString.Text = string.Format(Global.Yeoman_Item_CommandString, componentName, componentDescription, "webpart");
             SetSubmitState();
         }
 
         private void _componentName_TextChanged(object sender, EventArgs e)
         {
             componentName = _componentName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Item_CommandString, componentName, componentDescription);
+            _commandString.Text = string.Format(Global.Yeoman_Item_CommandString, componentName, componentDescription, "webpart");
             SetSubmitState();
         }
 

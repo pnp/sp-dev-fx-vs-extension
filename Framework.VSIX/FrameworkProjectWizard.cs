@@ -301,7 +301,7 @@ namespace Framework.VSIX
             _commandString.Size = new System.Drawing.Size(560, 200);
             _commandString.Multiline = true;
             _commandString.ScrollBars = ScrollBars.Vertical;
-            _commandString.Text = string.Format(Global.Yeoman_Project_DefaultCommandString, solutionName, "none", componentName, componentDescription, skipInstallCommand);
+            _commandString.Text = string.Format(Global.Yeoman_Project_DefaultCommandString, solutionName, "none", componentName, componentDescription, "webpart", skipInstallCommand);
             tabAdv.Controls.Add(_commandString);
 
             Label _label7 = new Label();
@@ -349,7 +349,7 @@ namespace Framework.VSIX
         private void _skipInstall_CheckedChanged(object sender, EventArgs e)
         {
             skipInstallCommand = this._skipInstall.Checked == true ? Global.Form_SkipInstall_Flag : string.Empty;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
             SetSubmitState();
         }
 
@@ -362,28 +362,28 @@ namespace Framework.VSIX
         private void _componentDescription_TextChanged(object sender, EventArgs e)
         {
             componentDescription = _componentDescription.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
             SetSubmitState();
         }
 
         private void _componentName_TextChanged(object sender, EventArgs e)
         {
             componentName = _componentName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
             SetSubmitState();
         }
 
         private void _framework_SelectedIndexChanged(object sender, EventArgs e)
         {
             framework = ((KeyValuePair<string, string>)_framework.SelectedItem).Key;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
             SetSubmitState();
         }
 
         private void _solutionName_TextChanged(object sender, EventArgs e)
         {
             solutionName = _solutionName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, skipInstallCommand);
+            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
             SetSubmitState();
         }
 
