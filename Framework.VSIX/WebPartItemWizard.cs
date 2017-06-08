@@ -4,12 +4,9 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Windows.Forms;
 using System.Drawing;
-using Microsoft.CSharp;
 using EnvDTE;
 using System.IO;
 using System.Text;
-using System.Globalization;
-using System.Threading;
 using System.Resources;
 using System.Reflection;
 using Framework.VSIX.Resources;
@@ -18,93 +15,88 @@ namespace Framework.VSIX
 {
     public class WebPartItemWizard : IWizard
     {
-        private WebPartInputForm inputForm;
-        private string componentName;
-        private string componentDescription;
-        private string commandString;
-        private string showWindow;
-        private bool formCancel;
+        private string _componentName;
+        private string _componentDescription;
+        private string _commandString;
+        private bool _showWindow;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
         }
 
         public void ProjectFinishedGenerating(Project project)
-        {           
+        {
         }
 
         public void ProjectItemFinishedGenerating(ProjectItem
             projectItem)
         {
-            if (!formCancel)
+            string projectDir = projectItem.ContainingProject.FullName;
+            projectDir = projectDir.Substring(0, projectDir.LastIndexOf("\\", StringComparison.Ordinal));
+            string logFile = $@"{projectDir}\{_componentName}.log";
+
+            _commandString = _commandString.Replace("$ComponentName$", _componentName);
+            _commandString = _commandString.Replace("$ComponentDescription$", _componentDescription);
+
+            StringBuilder outputText = new StringBuilder();
+
+            using (var proc = new System.Diagnostics.Process())
             {
-                string projectDir = projectItem.ContainingProject.FullName;
-                projectDir = projectDir.Substring(0, projectDir.LastIndexOf("\\"));
-                string logFile = String.Format(@"{0}\{1}.log", projectDir, componentName);
+                proc.StartInfo.WorkingDirectory = projectDir;
+                proc.StartInfo.FileName = @"cmd.exe";
 
-                commandString = commandString.Replace("$ComponentName$", componentName);
-                commandString = commandString.Replace("$ComponentDescription$", componentDescription);
-
-                StringBuilder outputText = new StringBuilder();
-
-                using (var proc = new System.Diagnostics.Process())
+                if (!_showWindow)
                 {
-                    proc.StartInfo.WorkingDirectory = projectDir;
-                    proc.StartInfo.FileName = @"cmd.exe";
+                    proc.StartInfo.Arguments = $@" /c  {_commandString}";
+                    proc.StartInfo.RedirectStandardInput = true;
+                    proc.StartInfo.RedirectStandardOutput = true;
+                    proc.StartInfo.RedirectStandardError = true;
+                    proc.StartInfo.CreateNoWindow = true;
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    proc.Start();
 
-                    if (showWindow == "false")
+                    proc.StandardInput.Flush();
+                    proc.StandardInput.WriteLine("exit");
+                    proc.StandardInput.Flush();
+
+                    using (StreamReader reader = proc.StandardOutput)
                     {
-                        proc.StartInfo.Arguments = string.Format(@" /c  {0}", commandString);
-                        proc.StartInfo.RedirectStandardInput = true;
-                        proc.StartInfo.RedirectStandardOutput = true;
-                        proc.StartInfo.RedirectStandardError = true;
-                        proc.StartInfo.CreateNoWindow = true;
-                        proc.StartInfo.UseShellExecute = false;
-                        proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        proc.Start();
-
-                        proc.StandardInput.Flush();
-                        proc.StandardInput.WriteLine("exit");
-                        proc.StandardInput.Flush();
-
-                        using (StreamReader reader = proc.StandardOutput)
-                        {
-                            string result = reader.ReadToEnd();
-                            outputText.Append(result);
-                        }
-
-                        using (StreamReader reader = proc.StandardError)
-                        {
-                            string result = reader.ReadToEnd();
-                            outputText.Append(result);
-                        }
-                    }
-                    else
-                    {
-                        proc.StartInfo.Arguments = string.Format(@" /k  {0}", commandString);
-                        proc.Start();
+                        string result = reader.ReadToEnd();
+                        outputText.Append(result);
                     }
 
-                    proc.WaitForExit();
-
-                    using (StreamWriter sw = File.AppendText(logFile))
+                    using (StreamReader reader = proc.StandardError)
                     {
-                        sw.Write(outputText);
+                        string result = reader.ReadToEnd();
+                        outputText.Append(result);
                     }
                 }
-
-                string[] files = Directory.GetFiles(projectDir, "*.*", SearchOption.AllDirectories);
-
-                foreach (string file in files)
+                else
                 {
-                    if (!file.ToLower().Contains("node_modules") && !file.ToLower().Contains(@"\bin\") && !file.ToLower().Contains(@"\obj\") && !file.ToLower().Contains(@"\properties\"))
+                    proc.StartInfo.Arguments = $@" /k  {_commandString}";
+                    proc.Start();
+                }
+
+                proc.WaitForExit();
+
+                using (StreamWriter sw = File.AppendText(logFile))
+                {
+                    sw.Write(outputText);
+                }
+            }
+
+            string[] files = Directory.GetFiles(projectDir, "*.*", SearchOption.AllDirectories);
+
+            foreach (string file in files)
+            {
+                if (!file.ToLower().Contains("node_modules") && !file.ToLower().Contains(@"\bin\") && !file.ToLower().Contains(@"\obj\") && !file.ToLower().Contains(@"\properties\"))
+                {
+                    try
                     {
-                        try
-                        {
-                            projectItem.ContainingProject.ProjectItems.AddFromFile(file);
-                        }
-                        catch { }
+                        projectItem.ContainingProject.ProjectItems.AddFromFile(file);
                     }
+                    catch { }
                 }
             }
         }
@@ -119,35 +111,27 @@ namespace Framework.VSIX
         {
             try
             {
-                inputForm = new WebPartInputForm();
-                inputForm.ShowDialog();
-                formCancel = UserInputForm.FormCancel;
-
-                if (!formCancel)
+                using (WebPartInputForm inputForm = new WebPartInputForm())
                 {
-                    componentName = WebPartInputForm.ComponentName;
-                    componentDescription = WebPartInputForm.ComponentDescription;
-                    commandString = WebPartInputForm.CommandString;
-                    showWindow = WebPartInputForm.ShowWindow;
-
-                    try
+                    if (inputForm.ShowDialog() != DialogResult.OK)
                     {
-                        replacementsDictionary.Remove("$ComponentName$");
-                        replacementsDictionary.Remove("$ComponentDescription$");
-                        replacementsDictionary.Remove("$CommandString$");
-                        replacementsDictionary.Remove("$ShowWindow$");
+                        throw new WizardCancelledException();
                     }
-                    catch { }
 
-                    replacementsDictionary.Add("$ComponentName$", componentName);
-                    replacementsDictionary.Add("$ComponentDescription$", componentDescription);
-                    replacementsDictionary.Add("$CommandString$", commandString);
-                    replacementsDictionary.Add("$ShowWindow$", showWindow);
+                    replacementsDictionary["$ComponentName$"] = _componentName = inputForm.ComponentName;
+                    replacementsDictionary["$ComponentDescription$"] = _componentDescription = inputForm.ComponentDescription;
+                    replacementsDictionary["$CommandString$"] = _commandString = inputForm.CommandString;
+                    _showWindow = inputForm.ShowWindow;
                 }
+            }
+            catch (WizardCancelledException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                throw new WizardCancelledException();
             }
         }
 
@@ -157,215 +141,209 @@ namespace Framework.VSIX
         }
     }
 
-    public partial class WebPartInputForm : Form
+    public class WebPartInputForm : Form
     {
-        private static string componentName;
-        private static string componentDescription;
-        private static string commandString;
-        private static string showWindow;
-        private static bool formCancel = false;
-        private TextBox _componentName;
-        private TextBox _componentDescription;
-        private TextBox _commandString;
-        private Button button1;
-        private Button button2;
-        private CheckBox _showWindow;
-        ResourceManager rm = new ResourceManager("Framework.VSIX.Resources.Global", Assembly.GetExecutingAssembly());
-
+        private readonly TextBox _componentName;
+        private readonly TextBox _componentDescription;
+        private readonly TextBox _commandString;
+        private readonly Button _button1;
+        private readonly Button _button2;
+        private readonly CheckBox _showWindow;
+        private readonly ResourceManager _rm = new ResourceManager("Framework.VSIX.Resources.Global", Assembly.GetExecutingAssembly());
 
         public WebPartInputForm()
         {
-            this.Size = new System.Drawing.Size(600, 450);
-            this.Name = Global.Form_Item_Name;
-            this.Text = Global.Form_Item_Title;
-            this.Icon = Global.Extension;
+            Size = new Size(600, 450);
+            Name = Global.Form_Item_Name;
+            Text = Global.Form_Item_Title;
+            Icon = Global.Extension;
 
-            TabControl tabCtrl = new TabControl();
-            tabCtrl.Name = "ConfigTabControl";
-            tabCtrl.Width = 600;
-            tabCtrl.Height = 350;
+            TabControl tabCtrl = new TabControl
+            {
+                Name = "ConfigTabControl",
+                Width = 600,
+                Height = 350
+            };
+            Controls.Add(tabCtrl);
 
-            TabPage tabProps = new TabPage();
-            tabProps.Name = "ConfigTabPageProps";
-            tabProps.Text = Global.Form_PropertyTab_Title;
-            tabProps.Height = 350;
-            tabProps.Width = 600;
+            TabPage tabProps = new TabPage
+            {
+                Name = "ConfigTabPageProps",
+                Text = Global.Form_PropertyTab_Title,
+                Height = 350,
+                Width = 600
+            };
             tabProps.Click += TabProps_Click;
+            tabCtrl.Controls.Add(tabProps);
 
-            Label _label3 = new Label();
-            _label3.Location = new System.Drawing.Point(10, 20);
-            _label3.Size = new System.Drawing.Size(200, 20);
-            _label3.Text = Global.Form_ComponentName;
-            tabProps.Controls.Add(_label3);
+            Label label3 = new Label
+            {
+                Location = new Point(10, 20),
+                Size = new Size(200, 20),
+                Text = Global.Form_ComponentName
+            };
+            tabProps.Controls.Add(label3);
 
-            _componentName = new TextBox();
-            _componentName.Location = new System.Drawing.Point(10, 40);
-            _componentName.Size = new System.Drawing.Size(400, 20);
+            _componentName = new TextBox
+            {
+                Location = new Point(10, 40),
+                Size = new Size(400, 20)
+            };
             _componentName.TextChanged += _componentName_TextChanged;
             tabProps.Controls.Add(_componentName);
 
-            Label _label4 = new Label();
-            _label4.Location = new System.Drawing.Point(10, 70);
-            _label4.Size = new System.Drawing.Size(200, 20);
-            _label4.Text = Global.Form_ComponentDescription;
-            tabProps.Controls.Add(_label4);
+            Label label4 = new Label
+            {
+                Location = new Point(10, 70),
+                Size = new Size(200, 20),
+                Text = Global.Form_ComponentDescription
+            };
+            tabProps.Controls.Add(label4);
 
-            _componentDescription = new TextBox();
-            _componentDescription.Location = new System.Drawing.Point(10, 90);
-            _componentDescription.Size = new System.Drawing.Size(400, 20);
+            _componentDescription = new TextBox
+            {
+                Location = new Point(10, 90),
+                Size = new Size(400, 20)
+            };
             _componentDescription.TextChanged += _componentDescription_TextChanged;
             tabProps.Controls.Add(_componentDescription);
 
-            tabCtrl.Controls.Add(tabProps);
-
-            TabPage tabAdv = new TabPage();
-            tabAdv.Name = "ConfigTabPageAdvanced";
-            tabAdv.Text = Global.Form_AdvancedTab_Title;
-            tabAdv.Height = 350;
-            tabAdv.Width = 600;
+            TabPage tabAdv = new TabPage
+            {
+                Name = "ConfigTabPageAdvanced",
+                Text = Global.Form_AdvancedTab_Title,
+                Height = 350,
+                Width = 600
+            };
             tabAdv.Click += TabAdv_Click;
-
-            Label _label6 = new Label();
-            _label6.Location = new System.Drawing.Point(10, 20);
-            _label6.Size = new System.Drawing.Size(200, 20);
-            _label6.Text = Global.Form_CommandString;
-            tabAdv.Controls.Add(_label6);
-
-            _commandString = new TextBox();
-            _commandString.Location = new System.Drawing.Point(10, 40);
-            _commandString.Size = new System.Drawing.Size(560, 200);
-            _commandString.Multiline = true;
-            _commandString.ScrollBars = ScrollBars.Vertical;
-            _commandString.Text = string.Format(Global.Yeoman_Item_CommandString, componentName, componentDescription);
-            tabAdv.Controls.Add(_commandString);
-
-            Label _label7 = new Label();
-            _label7.Location = new System.Drawing.Point(10, 245);
-            _label7.Size = new System.Drawing.Size(500, 40);
-            _label7.Text = Global.Form_AdvancedTab_CommandDescription;
-            _label7.MaximumSize = new System.Drawing.Size(500, 40);
-            _label7.AutoSize = true;
-            tabAdv.Controls.Add(_label7);
-
-            _showWindow = new CheckBox();
-            _showWindow.Location = new System.Drawing.Point(10, 270);
-            _showWindow.Checked = false;
-            _showWindow.Text = Global.Form_ShowCommandWIndow;
-            _showWindow.AutoSize = true;
-            tabAdv.Controls.Add(_showWindow);
-
             tabCtrl.TabPages.Add(tabAdv);
 
-            this.Controls.Add(tabCtrl);
+            Label label6 = new Label
+            {
+                Location = new Point(10, 20),
+                Size = new Size(200, 20),
+                Text = Global.Form_CommandString
+            };
+            tabAdv.Controls.Add(label6);
 
-            button1 = new Button();
-            button1.Location = new System.Drawing.Point(10, 360);
-            button1.Size = new System.Drawing.Size(100, 25);
-            button1.Text = Global.Form_ButtonGenerate;
-            button1.Click += button1_Click;
-            button1.Enabled = false;
-            this.Controls.Add(button1);
+            _commandString = new TextBox
+            {
+                Location = new Point(10, 40),
+                Size = new Size(560, 200),
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Text = string.Format(Global.Yeoman_WebPartItem_CommandString, ComponentName, ComponentDescription)
+            };
+            tabAdv.Controls.Add(_commandString);
 
-            button2 = new Button();
-            button2.Location = new System.Drawing.Point(475, 360);
-            button2.Size = new System.Drawing.Size(100, 25);
-            button2.Text = Global.Form_ButtonCancel;
-            button2.Click += Button2_Click;
-            this.Controls.Add(button2);
+            Label label7 = new Label
+            {
+                Location = new Point(10, 245),
+                Size = new Size(500, 40),
+                Text = Global.Form_AdvancedTab_CommandDescription,
+                MaximumSize = new Size(500, 40),
+                AutoSize = true
+            };
+            tabAdv.Controls.Add(label7);
 
-            Label _label5 = new Label();
-            _label5.Location = new System.Drawing.Point(10, 390);
-            _label5.Size = new System.Drawing.Size(500, 20);
-            _label5.Text = Global.Form_Footer_GeneratorText;
-            this.Controls.Add(_label5);
+            _showWindow = new CheckBox
+            {
+                Location = new Point(10, 270),
+                Checked = false,
+                Text = Global.Form_ShowCommandWIndow,
+                AutoSize = true
+            };
+            tabAdv.Controls.Add(_showWindow);
 
+            _button1 = new Button
+            {
+                Location = new Point(10, 360),
+                Size = new Size(100, 25),
+                Text = Global.Form_ButtonGenerate,
+                Enabled = false
+            };
+            _button1.Click += _button1_Click;
+            Controls.Add(_button1);
+
+            _button2 = new Button
+            {
+                Location = new Point(475, 360),
+                Size = new Size(100, 25),
+                Text = Global.Form_ButtonCancel
+            };
+            _button2.Click += _button2_Click;
+            Controls.Add(_button2);
+
+            Label label5 = new Label
+            {
+                Location = new Point(10, 390),
+                Size = new Size(500, 20),
+                Text = Global.Form_Footer_GeneratorText
+            };
+            Controls.Add(label5);
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        public string ComponentName
         {
-            formCancel = true;
-            this.Close();
+            get => _componentName.Text;
+            set => _componentName.Text = value;
+        }
+
+        public string ComponentDescription
+        {
+            get => _componentDescription.Text;
+            set => _componentDescription.Text = value;
+        }
+
+        public string CommandString
+        {
+            get => _commandString.Text;
+            set => _commandString.Text = value;
+        }
+
+        public bool ShowWindow
+        {
+            get => _showWindow.Checked;
+            set => _showWindow.Checked = value;
+        }
+
+        private void TabProps_Click(object sender, EventArgs e)
+        {
         }
 
         private void TabAdv_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void _componentDescription_TextChanged(object sender, EventArgs e)
         {
-            componentDescription = _componentDescription.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Item_CommandString, componentName, componentDescription);
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_ComponentDescription, ComponentDescription);
             SetSubmitState();
         }
 
         private void _componentName_TextChanged(object sender, EventArgs e)
         {
-            componentName = _componentName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Item_CommandString, componentName, componentDescription);
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_ComponentName, ComponentName);
             SetSubmitState();
         }
 
-        private void TabProps_Click(object sender, EventArgs e)
+        private void _button1_Click(object sender, EventArgs e)
         {
-            
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
-        public static string ComponentName
+        private void _button2_Click(object sender, EventArgs e)
         {
-            get
-            {
-                return componentName;
-            }
-            set
-            {
-                componentName = value;
-            }
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
-        public static string ComponentDescription
+        private void SetSubmitState()
         {
-            get
-            {
-                return componentDescription;
-            }
-            set
-            {
-                componentDescription = value;
-            }
-        }
-
-        public static string CommandString
-        {
-            get { return commandString; }
-            set { commandString = value; }
-        }
-
-        public static string ShowWindow
-        {
-            get { return showWindow; }
-            set { showWindow = value; }
-        }
-
-        public static bool FormCancel
-        {
-            get { return formCancel; }
-            set { formCancel = value; }
-        }
-
-        protected void button1_Click(object sender, EventArgs e)
-        {
-            componentName = _componentName.Text;
-            componentDescription = _componentDescription.Text;
-            commandString = _commandString.Text;
-            showWindow = _showWindow.Checked == true ? "true" : "false";
-            this.Close();
-        }
-
-        protected void SetSubmitState()
-        {
-            if (!string.IsNullOrWhiteSpace(_componentName.Text) && !string.IsNullOrWhiteSpace(_componentDescription.Text))
-                button1.Enabled = true;
+            _button1.Enabled = !string.IsNullOrWhiteSpace(_componentName.Text) &&
+                              !string.IsNullOrWhiteSpace(_componentDescription.Text);
         }
     }
 }
