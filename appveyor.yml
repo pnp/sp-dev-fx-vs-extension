@@ -1,0 +1,32 @@
+version: '{build}'
+pull_requests:
+  do_not_increment_build_number: true
+skip_non_tags: true
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+before_build:
+- ps: >-
+    Write-Host "$env:APPVEYOR_BUILD_VERSION"
+
+    $manPath = Resolve-Path .\Framework.VSIX\source.extension.vsixmanifest
+
+    [Xml] $manifest = Get-Content $manPath
+
+    $manifest.PackageManifest.Metadata.Identity.Version = "1.0.$env:APPVEYOR_BUILD_VERSION"
+
+    $manifest.Save($manPath)
+
+
+    nuget restore
+build:
+  verbosity: minimal
+artifacts:
+- path: Framework.VSIX\bin\$(configuration)\Framework.VSIX.vsix
+deploy:
+- provider: GitHub
+  release: v1.0.$(APPVEYOR_BUILD_VERSION)
+  auth_token:
+    secure: zK12v9qF0HKPG0fqWlWh8nEnjXQFRTsYXm4HTNCIFMwKlcKgfEGesEpe1uPlqMIt
+  artifact: Framework.VSIX\bin\$(configuration)\Framework.VSIX.vsix
+  draft: true
