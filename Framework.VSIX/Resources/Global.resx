@@ -127,6 +127,9 @@
   <data name="Form_AdvancedTab_Title" xml:space="preserve">
     <value>Advanced</value>
   </data>
+  <data name="Form_ApplicationCustomizer" xml:space="preserve">
+    <value>Application Customizer (Preview)</value>
+  </data>
   <data name="Form_ButtonCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -145,8 +148,20 @@
   <data name="Form_ComponentName" xml:space="preserve">
     <value>Component Name:</value>
   </data>
+  <data name="Form_ComponentType" xml:space="preserve">
+    <value>Component Type:</value>
+  </data>
   <data name="Form_EmptyFieldMessage" xml:space="preserve">
     <value>One or more required fields are empty.</value>
+  </data>
+  <data name="Form_Extension" xml:space="preserve">
+    <value>Extension (Preview)</value>
+  </data>
+  <data name="Form_ExtensionType" xml:space="preserve">
+    <value>Extension Type:</value>
+  </data>
+  <data name="Form_FieldCustomizer" xml:space="preserve">
+    <value>Field Customizer (Preview)</value>
   </data>
   <data name="Form_Footer_GeneratorText" xml:space="preserve">
     <value>NOTE: Running the generator may take some time. Please wait while the process completes.</value>
@@ -159,6 +174,9 @@
   </data>
   <data name="Form_Item_Title" xml:space="preserve">
     <value>SharePoint Framework Web Part Configuration</value>
+  </data>
+  <data name="Form_ListViewCommandSet" xml:space="preserve">
+    <value>ListView Command Set (Preview)</value>
   </data>
   <data name="Form_LogTab_Title" xml:space="preserve">
     <value>Log</value>
@@ -178,19 +196,37 @@
   <data name="Form_SkipInstall" xml:space="preserve">
     <value>Do not automatically install dependencies (skip "npm install" command)</value>
   </data>
-  <data name="Form_SkipInstall_Flag" xml:space="preserve">
-    <value>--skip-install</value>
-  </data>
   <data name="Form_SolutionName" xml:space="preserve">
     <value>Solution Name:</value>
   </data>
-  <data name="Yeoman_Item_CommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --componentName "{0}" --componentDescription "{1}" --componentType "{2}"</value>
+  <data name="Form_WebPart" xml:space="preserve">
+    <value>WebPart</value>
+  </data>
+  <data name="Yeoman_ComponentDescription" xml:space="preserve">
+    <value>--componentDescription</value>
+  </data>
+  <data name="Yeoman_ComponentName" xml:space="preserve">
+    <value>--componentName</value>
+  </data>
+  <data name="Yeoman_ComponentType" xml:space="preserve">
+    <value>--componentType</value>
+  </data>
+  <data name="Yeoman_ExtensionType" xml:space="preserve">
+    <value>--extensionType</value>
+  </data>
+  <data name="Yeoman_Framework" xml:space="preserve">
+    <value>--framework</value>
   </data>
   <data name="Yeoman_Project_CommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" --componentType "{4}" {5}</value>
+    <value>yo @microsoft/sharepoint --solutionName "{0}" --componentType "{1}" --framework "{2}" --componentName "{3}" --componentDescription "{4}"</value>
   </data>
-  <data name="Yeoman_Project_DefaultCommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" --componentType "{4}" {5}</value>
+  <data name="Yeoman_SkipInstall_Flag" xml:space="preserve">
+    <value>--skip-install</value>
+  </data>
+  <data name="Yeoman_SolutionName" xml:space="preserve">
+    <value>--solutionName</value>
+  </data>
+  <data name="Yeoman_WebPartItem_CommandString" xml:space="preserve">
+    <value>yo @microsoft/sharepoint --componentType "webpart" --componentName "{0}" --componentDescription "{1}"</value>
   </data>
 </root>

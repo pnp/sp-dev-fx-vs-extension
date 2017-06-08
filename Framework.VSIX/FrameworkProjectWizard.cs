@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Drawing;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Windows.Forms;
 using EnvDTE;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Resources;
 using Framework.VSIX.Resources;
 using System.Reflection;
 
-
 namespace Framework.VSIX
 {
     public class FrameworkProjectWizard : IWizard
     {
-        private UserInputForm inputForm;
-        private string solutionName;
-        private string framework;
-        private string componentName;
-        private string componentDescription;
-        private string solutionDir;
-        private string projectDir;
-        private string logFile;
-        private string commandString;
-        private string showWindow;
-        private string skipInstall;
-        private bool formCancel;
+        private string _solutionName;
+        private string _componentType;
+        private string _extensionType;
+        private string _framework;
+        private string _componentName;
+        private string _componentDescription;
+        private string _solutionDir;
+        private string _projectDir;
+        private string _logFile;
+        private string _commandString;
+        private bool _showWindow;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -34,73 +34,72 @@ namespace Framework.VSIX
 
         public void ProjectFinishedGenerating(Project project)
         {
-            if (!formCancel)
+            _commandString = _commandString.Replace("$SolutionName$", _solutionName);
+            _commandString = _commandString.Replace("$ComponentType$", _componentType);
+            _commandString = _commandString.Replace("$ExtensionType$", _extensionType);
+            _commandString = _commandString.Replace("$Framework$", _framework);
+            _commandString = _commandString.Replace("$ComponentName$", _componentName);
+            _commandString = _commandString.Replace("$ComponentDescription$", _componentDescription);
+
+            StringBuilder outputText = new StringBuilder();
+
+            using (var proc = new System.Diagnostics.Process())
             {
-                commandString = commandString.Replace("$SolutionName$", solutionName);
-                commandString = commandString.Replace("$Framework$", framework);
-                commandString = commandString.Replace("$ComponentName$", componentName);
-                commandString = commandString.Replace("$ComponentDescription$", componentDescription);
+                proc.StartInfo.WorkingDirectory = _projectDir;
+                proc.StartInfo.FileName = @"cmd.exe";
 
-                StringBuilder outputText = new StringBuilder();
-
-                using (var proc = new System.Diagnostics.Process())
+                if (!_showWindow)
                 {
-                    proc.StartInfo.WorkingDirectory = solutionDir;
-                    proc.StartInfo.FileName = @"cmd.exe";
+                    proc.StartInfo.Arguments = $@" /c  {_commandString}";
+                    proc.StartInfo.RedirectStandardInput = true;
+                    proc.StartInfo.RedirectStandardOutput = true;
+                    proc.StartInfo.RedirectStandardError = true;
+                    proc.StartInfo.CreateNoWindow = true;
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    proc.Start();
 
-                    if (showWindow == "false")
+                    proc.StandardInput.Flush();
+                    proc.StandardInput.WriteLine("exit");
+                    proc.StandardInput.Flush();
+
+                    using (StreamReader reader = proc.StandardOutput)
                     {
-                        proc.StartInfo.Arguments = string.Format(@" /c  {0}", commandString);
-                        proc.StartInfo.RedirectStandardInput = true;
-                        proc.StartInfo.RedirectStandardOutput = true;
-                        proc.StartInfo.RedirectStandardError = true;
-                        proc.StartInfo.CreateNoWindow = true;
-                        proc.StartInfo.UseShellExecute = false;
-                        proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        proc.Start();
-
-                        proc.StandardInput.Flush();
-                        proc.StandardInput.WriteLine("exit");
-                        proc.StandardInput.Flush();
-
-                        using (StreamReader reader = proc.StandardOutput)
-                        {
-                            string result = reader.ReadToEnd();
-                            outputText.Append(result);
-                        }
-
-                        using (StreamReader reader = proc.StandardError)
-                        {
-                            string result = reader.ReadToEnd();
-                            outputText.Append(result);
-                        }
-                    }
-                    else
-                    {
-                        proc.StartInfo.Arguments = string.Format(@" /k  {0}", commandString);
-                        proc.Start();
+                        string result = reader.ReadToEnd();
+                        outputText.Append(result);
                     }
 
-                    proc.WaitForExit();
-
-                    using (StreamWriter sw = File.AppendText(logFile))
+                    using (StreamReader reader = proc.StandardError)
                     {
-                        sw.Write(outputText);
+                        string result = reader.ReadToEnd();
+                        outputText.Append(result);
                     }
                 }
-
-                string[] files = Directory.GetFiles(projectDir, "*.*", SearchOption.AllDirectories);
-
-                foreach (string file in files)
+                else
                 {
-                    if (!file.ToLower().Contains("node_modules") && !file.ToLower().Contains(@"\bin\") && !file.ToLower().Contains(@"\obj\") && !file.ToLower().Contains(@"\properties\"))
+                    proc.StartInfo.Arguments = $@" /k  {_commandString}";
+                    proc.Start();
+                }
+
+                proc.WaitForExit();
+
+                using (StreamWriter sw = File.AppendText(_logFile))
+                {
+                    sw.Write(outputText);
+                }
+            }
+
+            string[] files = Directory.GetFiles(_projectDir, "*.*", SearchOption.AllDirectories);
+
+            foreach (string file in files)
+            {
+                if (!file.ToLower().Contains("node_modules") && !file.ToLower().Contains(@"\bin\") && !file.ToLower().Contains(@"\obj\") && !file.ToLower().Contains(@"\properties\"))
+                {
+                    try
                     {
-                        try
-                        {
-                            project.ProjectItems.AddFromFile(file);
-                        }
-                        catch { }
+                        project.ProjectItems.AddFromFile(file);
                     }
+                    catch { }
                 }
             }
         }
@@ -121,47 +120,36 @@ namespace Framework.VSIX
         {
             try
             {
-                inputForm = new UserInputForm();
-                inputForm.Controls["ConfigTabControl"].Controls["ConfigTabPageProps"].Controls["spfxSolutionName"].Text = replacementsDictionary["$safeprojectname$"];
-                inputForm.ShowDialog();
-                formCancel = UserInputForm.FormCancel;
-
-                if (!formCancel)
+                using (UserInputForm inputForm = new UserInputForm())
                 {
-                    solutionName = UserInputForm.SolutionName;
-                    framework = UserInputForm.Framework;
-                    componentName = UserInputForm.ComponentName;
-                    componentDescription = UserInputForm.ComponentDescription;
-                    commandString = UserInputForm.CommandString;
-                    showWindow = UserInputForm.ShowWindow;
-                    skipInstall = UserInputForm.SkipInstall;
-
-                    try
+                    inputForm.SolutionName = replacementsDictionary["$safeprojectname$"];
+                    if (inputForm.ShowDialog() != DialogResult.OK)
                     {
-                        replacementsDictionary.Remove("$SolutionName$");
-                        replacementsDictionary.Remove("$Framework$");
-                        replacementsDictionary.Remove("$ComponentName$");
-                        replacementsDictionary.Remove("$ComponentDescription$");
-                        replacementsDictionary.Remove("$CommandString$");
+                        throw new WizardCancelledException();
                     }
-                    catch { }
 
-                    replacementsDictionary.Add("$SolutionName$", solutionName);
-                    replacementsDictionary.Add("$Framework$", framework);
-                    replacementsDictionary.Add("$ComponentName$", componentName);
-                    replacementsDictionary.Add("$ComponentDescription$", componentDescription);
-                    replacementsDictionary.Add("$CommandString$", commandString);
+                    replacementsDictionary["$SolutionName$"] = _solutionName = inputForm.SolutionName;
+                    replacementsDictionary["$ComponentType$"] = _componentType = inputForm.ComponentType;
+                    replacementsDictionary["$ExtensionType$"] = _extensionType = inputForm.ExtensionType;
+                    replacementsDictionary["$Framework$"] = _framework = inputForm.Framework;
+                    replacementsDictionary["$ComponentName$"] = _componentName = inputForm.ComponentName;
+                    replacementsDictionary["$ComponentDescription$"] = _componentDescription = inputForm.ComponentDescription;
+                    replacementsDictionary["$CommandString$"] = _commandString = inputForm.CommandString;
+                    _showWindow = inputForm.ShowWindow;
 
-                    solutionDir = System.IO.Path.GetDirectoryName(replacementsDictionary["$destinationdirectory$"]);
-                    projectDir = String.Format(@"{0}\{1}", solutionDir, replacementsDictionary["$safeprojectname$"]);
-                    projectDir = String.Format(@"{0}\{1}", solutionDir, solutionName);
-
-                    logFile = String.Format(@"{0}\generator.log", projectDir);
+                    _solutionDir = Path.GetDirectoryName(replacementsDictionary["$destinationdirectory$"]);
+                    _projectDir = $@"{_solutionDir}\{replacementsDictionary["$safeprojectname$"]}";
+                    _logFile = $@"{_projectDir}\generator.log";
                 }
+            }
+            catch (WizardCancelledException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                throw new WizardCancelledException();
             }
         }
 
@@ -171,219 +159,386 @@ namespace Framework.VSIX
         }
     }
 
-    public partial class UserInputForm : Form
+    public class UserInputForm : Form
     {
-        private static string solutionName;
-        private static string framework = "none";
-        private static string componentName;
-        private static string componentDescription;
-        private static string commandString;
-        private static string showWindow;
-        private static string skipInstall;
-        private static string skipInstallCommand = string.Empty;
-        private static bool formCancel = false;
-        private TextBox _solutionName;
-        private ComboBox _framework;
-        private TextBox _componentName;
-        private TextBox _componentDescription;
-        private TextBox _commandString;
-        private Button button1;
-        private Button button2;
-        private CheckBox _showWindow;
-        private CheckBox _skipInstall;
-        ResourceManager rm = new ResourceManager("Framework.VSIX.Resources.Global", Assembly.GetExecutingAssembly());
-
+        private readonly Label _extensionTypeLabel;
+        private readonly Label _frameworkLabel;
+        private readonly TextBox _solutionName;
+        private readonly ComboBox _componentType;
+        private readonly ComboBox _extensionType;
+        private readonly ComboBox _framework;
+        private readonly TextBox _componentName;
+        private readonly TextBox _componentDescription;
+        private readonly TextBox _commandString;
+        private readonly Button _button1;
+        private readonly Button _button2;
+        private readonly CheckBox _showWindow;
+        private readonly CheckBox _skipInstall;
+        private readonly ResourceManager _rm = new ResourceManager("Framework.VSIX.Resources.Global", Assembly.GetExecutingAssembly());
 
         public UserInputForm()
         {
-            this.Size = new System.Drawing.Size(600, 450);
-            this.Name = Global.Form_Project_Name;
-            this.Text = Global.Form_Project_Title;
-            this.Icon = Global.Extension;
+            Size = new Size(600, 460);
+            Name = Global.Form_Project_Name;
+            Text = Global.Form_Project_Title;
+            Icon = Global.Extension;
 
-            TabControl tabCtrl = new TabControl();
-            tabCtrl.Name = "ConfigTabControl";
-            tabCtrl.Width = 600;
-            tabCtrl.Height = 350;
+            TabControl tabCtrl = new TabControl
+            {
+                Name = "ConfigTabControl",
+                Width = 590,
+                Height = 360
+            };
+            Controls.Add(tabCtrl);
 
-            TabPage tabProps = new TabPage();
-            tabProps.Name = "ConfigTabPageProps";
-            tabProps.Text = Global.Form_PropertyTab_Title;
-            tabProps.Height = 350;
-            tabProps.Width = 600;
+            TabPage tabProps = new TabPage
+            {
+                Name = "ConfigTabPageProps",
+                Text = Global.Form_PropertyTab_Title,
+                Height = 360,
+                Width = 590
+            };
             tabProps.Click += TabProps_Click;
+            tabCtrl.TabPages.Add(tabProps);
 
-            Label _label1 = new Label();
-            _label1.Location = new System.Drawing.Point(10, 20);
-            _label1.Size = new System.Drawing.Size(200, 20);
-            _label1.Text = Global.Form_SolutionName;
-            tabProps.Controls.Add(_label1);
+            Label label1 = new Label
+            {
+                Location = new Point(10, 20),
+                Size = new Size(200, 20),
+                Text = Global.Form_SolutionName
+            };
+            tabProps.Controls.Add(label1);
 
-            _solutionName = new TextBox();
-            _solutionName.Name = "spfxSolutionName";
-            _solutionName.Location = new System.Drawing.Point(10, 40);
-            _solutionName.Size = new System.Drawing.Size(400, 20);
+            _solutionName = new TextBox
+            {
+                Name = "spfxSolutionName",
+                Location = new Point(10, 40),
+                Size = new Size(400, 20),
+                Enabled = false
+            };
             _solutionName.TextChanged += _solutionName_TextChanged;
-            _solutionName.Enabled = false;
             tabProps.Controls.Add(_solutionName);
 
-            Label _label2 = new Label();
-            _label2.Location = new System.Drawing.Point(10, 70);
-            _label2.Size = new System.Drawing.Size(200, 20);
-            _label2.Text = Global.Form_Framework;
-            tabProps.Controls.Add(_label2);
+            Label labelComponentType = new Label
+            {
+                Location = new Point(10, 70),
+                Size = new Size(200, 20),
+                Text = Global.Form_ComponentType
+            };
+            tabProps.Controls.Add(labelComponentType);
 
-            _framework = new ComboBox();
-            _framework.Location = new System.Drawing.Point(10, 90);
-            _framework.Size = new System.Drawing.Size(150, 20);
+            _componentType = new ComboBox
+            {
+                Location = new Point(10, 90),
+                Size = new Size(150, 20),
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+            tabProps.Controls.Add(_componentType);
 
-            Dictionary<string, string> comboSource = new Dictionary<string, string>();
-            comboSource.Add("none", "none");
-            comboSource.Add("react", "react");
-            comboSource.Add("knockout", "knockout");
+            Dictionary<string, string> componentTypeComboSource =
+                new Dictionary<string, string>
+                {
+                    { "webpart", Global.Form_WebPart },
+                    { "extension", Global.Form_Extension }
+                };
+            _componentType.DataSource = new BindingSource(componentTypeComboSource, null);
+            _componentType.DisplayMember = "Value";
+            _componentType.ValueMember = "Key";
+            _componentType.SelectedItem = componentTypeComboSource.First();
+            _componentType.SelectionChangeCommitted += _componentType_SelectionChangeCommitted;
+
+            _extensionTypeLabel = new Label
+            {
+                Location = new Point(10, 120),
+                Size = new Size(200, 20),
+                Text = Global.Form_ExtensionType,
+                Visible = false
+            };
+            tabProps.Controls.Add(_extensionTypeLabel);
+
+            _extensionType = new ComboBox
+            {
+                Location = new Point(10, 140),
+                Size = new Size(200, 20),
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Visible = false
+            };
+            tabProps.Controls.Add(_extensionType);
+
+            Dictionary<string, string> extensionTypeComboSource =
+                new Dictionary<string, string>
+                {
+                    { "ApplicationCustomizer", Global.Form_ApplicationCustomizer },
+                    { "FieldCustomizer", Global.Form_FieldCustomizer },
+                    { "ListViewCommandSet", Global.Form_ListViewCommandSet }
+                };
+            _extensionType.DataSource = new BindingSource(extensionTypeComboSource, null);
+            _extensionType.DisplayMember = "Value";
+            _extensionType.ValueMember = "Key";
+            _extensionType.SelectedItem = extensionTypeComboSource.First();
+            _extensionType.SelectionChangeCommitted += _extensionType_SelectionChangeCommitted;
+
+            _frameworkLabel = new Label
+            {
+                Location = new Point(10, 120),
+                Size = new Size(200, 20),
+                Text = Global.Form_Framework
+            };
+            tabProps.Controls.Add(_frameworkLabel);
+
+            _framework = new ComboBox
+            {
+                Location = new Point(10, 140),
+                Size = new Size(150, 20),
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+            tabProps.Controls.Add(_framework);
+
+            Dictionary<string, string> comboSource =
+                new Dictionary<string, string>
+                {
+                    { "none", "none" },
+                    { "react", "react" },
+                    { "knockout", "knockout" }
+                };
 
             _framework.DataSource = new BindingSource(comboSource, null);
             _framework.DisplayMember = "Value";
             _framework.ValueMember = "Key";
-            _framework.SelectedIndexChanged += _framework_SelectedIndexChanged;
+            _framework.SelectedItem = comboSource.First();
+            _framework.SelectionChangeCommitted += _framework_SelectionChangeCommitted;
 
-            tabProps.Controls.Add(_framework);
+            Label label3 = new Label
+            {
+                Location = new Point(10, 170),
+                Size = new Size(400, 20),
+                Text = Global.Form_ComponentName
+            };
+            tabProps.Controls.Add(label3);
 
-            Label _label3 = new Label();
-            _label3.Location = new System.Drawing.Point(10, 120);
-            _label3.Size = new System.Drawing.Size(400, 20);
-            _label3.Text = Global.Form_ComponentName;
-            tabProps.Controls.Add(_label3);
-
-            _componentName = new TextBox();
-            _componentName.Location = new System.Drawing.Point(10, 140);
-            _componentName.Size = new System.Drawing.Size(400, 20);
+            _componentName = new TextBox
+            {
+                Location = new Point(10, 190),
+                Size = new Size(400, 20)
+            };
             _componentName.TextChanged += _componentName_TextChanged;
             tabProps.Controls.Add(_componentName);
 
-            Label _label4 = new Label();
-            _label4.Location = new System.Drawing.Point(10, 170);
-            _label4.Size = new System.Drawing.Size(200, 20);
-            _label4.Text = Global.Form_ComponentDescription;
-            tabProps.Controls.Add(_label4);
+            Label label4 = new Label
+            {
+                Location = new Point(10, 220),
+                Size = new Size(200, 20),
+                Text = Global.Form_ComponentDescription
+            };
+            tabProps.Controls.Add(label4);
 
-            _componentDescription = new TextBox();
-            _componentDescription.Location = new System.Drawing.Point(10, 190);
-            _componentDescription.Size = new System.Drawing.Size(400, 20);
+            _componentDescription = new TextBox
+            {
+                Location = new Point(10, 240),
+                Size = new Size(400, 20)
+            };
             _componentDescription.TextChanged += _componentDescription_TextChanged;
             tabProps.Controls.Add(_componentDescription);
 
-            _skipInstall = new CheckBox();
-            _skipInstall.Location = new System.Drawing.Point(10, 230);
-            _skipInstall.Checked = false;
-            _skipInstall.Text = Global.Form_SkipInstall;
-            _skipInstall.AutoSize = true;
+            _skipInstall = new CheckBox
+            {
+                Location = new Point(10, 280),
+                Checked = false,
+                Text = Global.Form_SkipInstall,
+                AutoSize = true
+            };
             _skipInstall.CheckedChanged += _skipInstall_CheckedChanged;
             tabProps.Controls.Add(_skipInstall);
 
-            tabCtrl.TabPages.Add(tabProps);
-
-            TabPage tabAdv = new TabPage();
-            tabAdv.Name = "ConfigTabPageAdvanced";
-            tabAdv.Text = Global.Form_AdvancedTab_Title;
-            tabAdv.Height = 350;
-            tabAdv.Width = 600;
+            TabPage tabAdv = new TabPage
+            {
+                Name = "ConfigTabPageAdvanced",
+                Text = Global.Form_AdvancedTab_Title,
+                Height = 360,
+                Width = 590
+            };
             tabAdv.Click += TabAdv_Click;
-
-            Label _label6 = new Label();
-            _label6.Location = new System.Drawing.Point(10, 20);
-            _label6.Size = new System.Drawing.Size(200, 20);
-            _label6.Text = Global.Form_CommandString;
-            tabAdv.Controls.Add(_label6);
-
-            _commandString = new TextBox();
-            _commandString.Location = new System.Drawing.Point(10, 40);
-            _commandString.Size = new System.Drawing.Size(560, 200);
-            _commandString.Multiline = true;
-            _commandString.ScrollBars = ScrollBars.Vertical;
-            _commandString.Text = string.Format(Global.Yeoman_Project_DefaultCommandString, solutionName, "none", componentName, componentDescription, "webpart", skipInstallCommand);
-            tabAdv.Controls.Add(_commandString);
-
-            Label _label7 = new Label();
-            _label7.Location = new System.Drawing.Point(10, 245);
-            _label7.Size = new System.Drawing.Size(500, 40);
-            _label7.Text = Global.Form_AdvancedTab_CommandDescription;
-            _label7.MaximumSize = new System.Drawing.Size(500, 40);
-            _label7.AutoSize = true;
-            tabAdv.Controls.Add(_label7);
-
-            _showWindow = new CheckBox();
-            _showWindow.Location = new System.Drawing.Point(10, 270);
-            _showWindow.Checked = false;
-            _showWindow.Text = Global.Form_ShowCommandWIndow;
-            _showWindow.AutoSize = true;
-            tabAdv.Controls.Add(_showWindow);
-
             tabCtrl.TabPages.Add(tabAdv);
 
-            button1 = new Button();
-            button1.Location = new System.Drawing.Point(10, 360);
-            button1.Size = new System.Drawing.Size(100, 25);
-            button1.Text = Global.Form_ButtonGenerate;
-            button1.Click += button1_Click;
-            button1.Enabled = false;
-            this.Controls.Add(button1);
+            Label label6 = new Label
+            {
+                Location = new Point(10, 20),
+                Size = new Size(200, 20),
+                Text = Global.Form_CommandString
+            };
+            tabAdv.Controls.Add(label6);
 
-            button2 = new Button();
-            button2.Location = new System.Drawing.Point(475, 360);
-            button2.Size = new System.Drawing.Size(100, 25);
-            button2.Text = Global.Form_ButtonCancel;
-            button2.Click += Button2_Click;
-            this.Controls.Add(button2);
+            _commandString = new TextBox
+            {
+                Location = new Point(10, 40),
+                Size = new Size(560, 200),
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Text = string.Format(Global.Yeoman_Project_CommandString, SolutionName, ComponentType, Framework,
+                    ComponentName, ComponentDescription)
+            };
+            tabAdv.Controls.Add(_commandString);
 
-            Label _label5 = new Label();
-            _label5.Location = new System.Drawing.Point(10, 390);
-            _label5.Size = new System.Drawing.Size(500, 20);
-            _label5.Text = Global.Form_Footer_GeneratorText;
-            this.Controls.Add(_label5);
+            Label label7 = new Label
+            {
+                Location = new Point(10, 245),
+                Size = new Size(500, 40),
+                Text = Global.Form_AdvancedTab_CommandDescription,
+                MaximumSize = new Size(500, 40),
+                AutoSize = true
+            };
+            tabAdv.Controls.Add(label7);
 
-            this.Controls.Add(tabCtrl);
+            _showWindow = new CheckBox
+            {
+                Location = new Point(10, 270),
+                Checked = false,
+                Text = Global.Form_ShowCommandWIndow,
+                AutoSize = true
+            };
+            tabAdv.Controls.Add(_showWindow);
 
+            _button1 = new Button
+            {
+                Location = new Point(10, 370),
+                Size = new Size(100, 25),
+                Text = Global.Form_ButtonGenerate,
+                Enabled = false
+            };
+            _button1.Click += _button1_Click;
+            Controls.Add(_button1);
+
+            _button2 = new Button
+            {
+                Location = new Point(475, 370),
+                Size = new Size(100, 25),
+                Text = Global.Form_ButtonCancel
+            };
+            _button2.Click += _button2_Click;
+            Controls.Add(_button2);
+
+            Label label5 = new Label
+            {
+                Location = new Point(10, 400),
+                Size = new Size(500, 20),
+                Text = Global.Form_Footer_GeneratorText
+            };
+            Controls.Add(label5);
+        }
+
+        public string SolutionName
+        {
+            get => _solutionName.Text;
+            set => _solutionName.Text = value;
+        }
+
+        public string ComponentType
+        {
+            get => (string)_componentType.SelectedValue;
+            set => _componentType.SelectedValue = value;
+        }
+
+        public string ExtensionType
+        {
+            get => ComponentType == "extension" ? (string)_extensionType.SelectedValue : string.Empty;
+            set => _extensionType.SelectedValue = value;
+        }
+
+        public string Framework
+        {
+            get => ComponentType == "webpart" ? (string)_framework.SelectedValue : string.Empty;
+            set => _framework.SelectedValue = value;
+        }
+
+        public string ComponentName
+        {
+            get => _componentName.Text;
+            set => _componentName.Text = value;
+        }
+
+        public string ComponentDescription
+        {
+            get => _componentDescription.Text;
+            set => _componentDescription.Text = value;
+        }
+
+        public string CommandString
+        {
+            get => _commandString.Text;
+            set => _commandString.Text = value;
+        }
+
+        public bool ShowWindow
+        {
+            get => _showWindow.Checked;
+            set => _showWindow.Checked = value;
+        }
+
+        public bool SkipInstall
+        {
+            get => _skipInstall.Checked;
+            set => _skipInstall.Checked = value;
         }
 
         private void _skipInstall_CheckedChanged(object sender, EventArgs e)
         {
-            skipInstallCommand = this._skipInstall.Checked == true ? Global.Form_SkipInstall_Flag : string.Empty;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            CommandString = SkipInstall
+                ? $@"{CommandString} {Global.Yeoman_SkipInstall_Flag}"
+                : CommandString.Replace($@" {Global.Yeoman_SkipInstall_Flag}", string.Empty);
             SetSubmitState();
-        }
-
-        private void Button2_Click(object sender, EventArgs e)
-        {
-            formCancel = true;
-            this.Close();
         }
 
         private void _componentDescription_TextChanged(object sender, EventArgs e)
         {
-            componentDescription = _componentDescription.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_ComponentDescription, ComponentDescription);
             SetSubmitState();
         }
 
         private void _componentName_TextChanged(object sender, EventArgs e)
         {
-            componentName = _componentName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_ComponentName, ComponentName);
             SetSubmitState();
         }
 
-        private void _framework_SelectedIndexChanged(object sender, EventArgs e)
+        private void _framework_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            framework = ((KeyValuePair<string, string>)_framework.SelectedItem).Key;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_Framework, Framework);
             SetSubmitState();
         }
 
         private void _solutionName_TextChanged(object sender, EventArgs e)
         {
-            solutionName = _solutionName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_SolutionName, SolutionName);
+            SetSubmitState();
+        }
+
+        private void _componentType_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            switch (ComponentType)
+            {
+                case "webpart":
+                    _extensionTypeLabel.Hide();
+                    _extensionType.Hide();
+                    _frameworkLabel.Show();
+                    _framework.Show();
+                    break;
+                case "extension":
+                    _frameworkLabel.Hide();
+                    _framework.Hide();
+                    _extensionTypeLabel.Show();
+                    _extensionType.Show();
+                    break;
+            }
+
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_ComponentType, ComponentType);
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_ExtensionType, ExtensionType, true);
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_Framework, Framework, true);
+            SetSubmitState();
+        }
+
+        private void _extensionType_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            CommandString = ParameterHelper.AddOrUpdateCommandParameter(CommandString, Global.Yeoman_ExtensionType, ExtensionType);
             SetSubmitState();
         }
 
@@ -397,94 +552,23 @@ namespace Framework.VSIX
 
         }
 
-        public static string SolutionName
+        private void _button1_Click(object sender, EventArgs e)
         {
-            get
-            {
-                return solutionName;
-            }
-            set
-            {
-                solutionName = value;
-            }
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
-        public static string Framework
+        private void _button2_Click(object sender, EventArgs e)
         {
-            get
-            {
-                return framework;
-            }
-            set
-            {
-                framework = value;
-            }
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
-        public static string ComponentName
+        private void SetSubmitState()
         {
-            get
-            {
-                return componentName;
-            }
-            set
-            {
-                componentName = value;
-            }
-        }
-
-        public static string ComponentDescription
-        {
-            get
-            {
-                return componentDescription;
-            }
-            set
-            {
-                componentDescription = value;
-            }
-        }
-
-        public static string CommandString
-        {
-            get { return commandString; }
-            set { commandString = value; }
-        }
-
-        public static string ShowWindow
-        {
-            get { return showWindow; }
-            set { showWindow = value; }
-        }
-
-        public static string SkipInstall
-        {
-            get { return skipInstall; }
-            set { skipInstall = value; }
-        }
-
-        public static bool FormCancel
-        {
-            get { return formCancel;  }
-            set { formCancel = value; }
-        }
-
-        protected void button1_Click(object sender, EventArgs e)
-        {
-            solutionName = _solutionName.Text;
-            componentName = _componentName.Text;
-            componentDescription = _componentDescription.Text;
-            framework = ((KeyValuePair<string, string>)_framework.SelectedItem).Key;
-            commandString = _commandString.Text;
-            showWindow = _showWindow.Checked == true ? "true" : "false";
-            skipInstall = _skipInstall.Checked == true ? "true" : "false";
-            this.Close();
-        }
-
-        protected void SetSubmitState()
-        {
-            if (!string.IsNullOrWhiteSpace(_solutionName.Text) && !string.IsNullOrWhiteSpace(_componentName.Text) && !string.IsNullOrWhiteSpace(_componentDescription.Text))
-                button1.Enabled = true;
+            _button1.Enabled = !string.IsNullOrWhiteSpace(_solutionName.Text) &&
+                               !string.IsNullOrWhiteSpace(_componentName.Text) &&
+                               !string.IsNullOrWhiteSpace(_componentDescription.Text);
         }
     }
 }

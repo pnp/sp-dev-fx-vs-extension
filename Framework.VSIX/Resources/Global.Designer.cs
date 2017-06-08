@@ -89,6 +89,15 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application Customizer (Preview).
+        /// </summary>
+        internal static string Form_ApplicationCustomizer {
+            get {
+                return ResourceManager.GetString("Form_ApplicationCustomizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         internal static string Form_ButtonCancel {
@@ -143,11 +152,47 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Component Type:.
+        /// </summary>
+        internal static string Form_ComponentType {
+            get {
+                return ResourceManager.GetString("Form_ComponentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to One or more required fields are empty..
         /// </summary>
         internal static string Form_EmptyFieldMessage {
             get {
                 return ResourceManager.GetString("Form_EmptyFieldMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extension (Preview).
+        /// </summary>
+        internal static string Form_Extension {
+            get {
+                return ResourceManager.GetString("Form_Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extension Type:.
+        /// </summary>
+        internal static string Form_ExtensionType {
+            get {
+                return ResourceManager.GetString("Form_ExtensionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field Customizer (Preview).
+        /// </summary>
+        internal static string Form_FieldCustomizer {
+            get {
+                return ResourceManager.GetString("Form_FieldCustomizer", resourceCulture);
             }
         }
         
@@ -184,6 +229,15 @@ namespace Framework.VSIX.Resources {
         internal static string Form_Item_Title {
             get {
                 return ResourceManager.GetString("Form_Item_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ListView Command Set (Preview).
+        /// </summary>
+        internal static string Form_ListViewCommandSet {
+            get {
+                return ResourceManager.GetString("Form_ListViewCommandSet", resourceCulture);
             }
         }
         
@@ -242,15 +296,6 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to --skip-install.
-        /// </summary>
-        internal static string Form_SkipInstall_Flag {
-            get {
-                return ResourceManager.GetString("Form_SkipInstall_Flag", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Solution Name:.
         /// </summary>
         internal static string Form_SolutionName {
@@ -260,16 +305,61 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --componentName &quot;{0}&quot; --componentDescription &quot;{1}&quot; --componentType &quot;{2}&quot;.
+        ///   Looks up a localized string similar to WebPart.
         /// </summary>
-        internal static string Yeoman_Item_CommandString {
+        internal static string Form_WebPart {
             get {
-                return ResourceManager.GetString("Yeoman_Item_CommandString", resourceCulture);
+                return ResourceManager.GetString("Form_WebPart", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; --componentType &quot;{4}&quot; {5}.
+        ///   Looks up a localized string similar to --componentDescription.
+        /// </summary>
+        internal static string Yeoman_ComponentDescription {
+            get {
+                return ResourceManager.GetString("Yeoman_ComponentDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --componentName.
+        /// </summary>
+        internal static string Yeoman_ComponentName {
+            get {
+                return ResourceManager.GetString("Yeoman_ComponentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --componentType.
+        /// </summary>
+        internal static string Yeoman_ComponentType {
+            get {
+                return ResourceManager.GetString("Yeoman_ComponentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --extensionType.
+        /// </summary>
+        internal static string Yeoman_ExtensionType {
+            get {
+                return ResourceManager.GetString("Yeoman_ExtensionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --framework.
+        /// </summary>
+        internal static string Yeoman_Framework {
+            get {
+                return ResourceManager.GetString("Yeoman_Framework", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot; --componentType &quot;{1}&quot; --framework &quot;{2}&quot; --componentName &quot;{3}&quot; --componentDescription &quot;{4}&quot;.
         /// </summary>
         internal static string Yeoman_Project_CommandString {
             get {
@@ -278,11 +368,29 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; --componentType &quot;{4}&quot; {5}.
+        ///   Looks up a localized string similar to --skip-install.
         /// </summary>
-        internal static string Yeoman_Project_DefaultCommandString {
+        internal static string Yeoman_SkipInstall_Flag {
             get {
-                return ResourceManager.GetString("Yeoman_Project_DefaultCommandString", resourceCulture);
+                return ResourceManager.GetString("Yeoman_SkipInstall_Flag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --solutionName.
+        /// </summary>
+        internal static string Yeoman_SolutionName {
+            get {
+                return ResourceManager.GetString("Yeoman_SolutionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --componentType &quot;webpart&quot; --componentName &quot;{0}&quot; --componentDescription &quot;{1}&quot;.
+        /// </summary>
+        internal static string Yeoman_WebPartItem_CommandString {
+            get {
+                return ResourceManager.GetString("Yeoman_WebPartItem_CommandString", resourceCulture);
             }
         }
     }
