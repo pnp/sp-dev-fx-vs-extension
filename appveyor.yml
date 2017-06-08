@@ -7,13 +7,13 @@ configuration: Release
 platform: Any CPU
 before_build:
 - ps: >-
-    Write-Host "$env:APPVEYOR_REPO_TAG_NAME"
+    Write-Host "$env:APPVEYOR_BUILD_VERSION"
 
     $manPath = Resolve-Path .\Framework.VSIX\source.extension.vsixmanifest
 
     [Xml] $manifest = Get-Content $manPath
 
-    $manifest.PackageManifest.Metadata.Identity.Version = "$env:APPVEYOR_REPO_TAG_NAME"
+    $manifest.PackageManifest.Metadata.Identity.Version = "1.0.$env:APPVEYOR_BUILD_VERSION"
 
     $manifest.Save($manPath)
 
@@ -25,7 +25,7 @@ artifacts:
 - path: Framework.VSIX\bin\$(configuration)\Framework.VSIX.vsix
 deploy:
 - provider: GitHub
-  release: v$(APPVEYOR_REPO_TAG_NAME)
+  release: v1.0.$(APPVEYOR_BUILD_VERSION)
   auth_token:
     secure: zK12v9qF0HKPG0fqWlWh8nEnjXQFRTsYXm4HTNCIFMwKlcKgfEGesEpe1uPlqMIt
   artifact: Framework.VSIX\bin\$(configuration)\Framework.VSIX.vsix
