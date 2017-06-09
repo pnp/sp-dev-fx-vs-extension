@@ -45,7 +45,7 @@ namespace Framework.VSIX
 
                 using (var proc = new System.Diagnostics.Process())
                 {
-                    proc.StartInfo.WorkingDirectory = solutionDir;
+                    proc.StartInfo.WorkingDirectory = projectDir;
                     proc.StartInfo.FileName = @"cmd.exe";
 
                     if (showWindow == "false")
@@ -182,6 +182,7 @@ namespace Framework.VSIX
         private static string skipInstall;
         private static string skipInstallCommand = string.Empty;
         private static bool formCancel = false;
+        private string _command = string.Empty;
         private TextBox _solutionName;
         private ComboBox _framework;
         private TextBox _componentName;
@@ -196,46 +197,58 @@ namespace Framework.VSIX
 
         public UserInputForm()
         {
+            bool genVersion = Utility.CheckGeneratorVersion(Global.Yeoman_Generator_ExtensionsVersion);
+            _command = genVersion == true ? Global.Yeoman_Project_CommandString_Extensions : Global.Yeoman_Project_CommandString;
+
             this.Size = new System.Drawing.Size(600, 450);
             this.Name = Global.Form_Project_Name;
             this.Text = Global.Form_Project_Title;
             this.Icon = Global.Extension;
 
-            TabControl tabCtrl = new TabControl();
-            tabCtrl.Name = "ConfigTabControl";
-            tabCtrl.Width = 600;
-            tabCtrl.Height = 350;
+            TabControl tabCtrl = new TabControl {
+                Name = "ConfigTabControl",
+                Width = 600,
+                Height = 350
+            };
 
-            TabPage tabProps = new TabPage();
-            tabProps.Name = "ConfigTabPageProps";
-            tabProps.Text = Global.Form_PropertyTab_Title;
-            tabProps.Height = 350;
-            tabProps.Width = 600;
+            TabPage tabProps = new TabPage {
+                Name = "ConfigTabPageProps",
+                Text = Global.Form_PropertyTab_Title,
+                Height = 350,
+                Width = 600
+            };
             tabProps.Click += TabProps_Click;
 
-            Label _label1 = new Label();
-            _label1.Location = new System.Drawing.Point(10, 20);
-            _label1.Size = new System.Drawing.Size(200, 20);
-            _label1.Text = Global.Form_SolutionName;
+            Label _label1 = new Label {
+                Location = new System.Drawing.Point(10, 20),
+                Size = new System.Drawing.Size(200, 20),
+                Text = Global.Form_SolutionName
+            };
             tabProps.Controls.Add(_label1);
 
-            _solutionName = new TextBox();
-            _solutionName.Name = "spfxSolutionName";
-            _solutionName.Location = new System.Drawing.Point(10, 40);
-            _solutionName.Size = new System.Drawing.Size(400, 20);
+            _solutionName = new TextBox {
+                Name = "spfxSolutionName",
+                Location = new System.Drawing.Point(10, 40),
+                Size = new System.Drawing.Size(400, 20),
+                
+                Enabled = false
+            };
             _solutionName.TextChanged += _solutionName_TextChanged;
-            _solutionName.Enabled = false;
             tabProps.Controls.Add(_solutionName);
 
-            Label _label2 = new Label();
-            _label2.Location = new System.Drawing.Point(10, 70);
-            _label2.Size = new System.Drawing.Size(200, 20);
-            _label2.Text = Global.Form_Framework;
+            Label _label2 = new Label
+            {
+                Location = new System.Drawing.Point(10, 70),
+                Size = new System.Drawing.Size(200, 20),
+                Text = Global.Form_Framework
+            };
             tabProps.Controls.Add(_label2);
 
-            _framework = new ComboBox();
-            _framework.Location = new System.Drawing.Point(10, 90);
-            _framework.Size = new System.Drawing.Size(150, 20);
+            _framework = new ComboBox
+            {
+                Location = new System.Drawing.Point(10, 90),
+                Size = new System.Drawing.Size(150, 20)
+            };
 
             Dictionary<string, string> comboSource = new Dictionary<string, string>();
             comboSource.Add("none", "none");
@@ -249,97 +262,122 @@ namespace Framework.VSIX
 
             tabProps.Controls.Add(_framework);
 
-            Label _label3 = new Label();
-            _label3.Location = new System.Drawing.Point(10, 120);
-            _label3.Size = new System.Drawing.Size(400, 20);
-            _label3.Text = Global.Form_ComponentName;
+            Label _label3 = new Label
+            {
+                Location = new System.Drawing.Point(10, 120),
+                Size = new System.Drawing.Size(400, 20),
+                Text = Global.Form_ComponentName
+            };
             tabProps.Controls.Add(_label3);
 
-            _componentName = new TextBox();
-            _componentName.Location = new System.Drawing.Point(10, 140);
-            _componentName.Size = new System.Drawing.Size(400, 20);
+            _componentName = new TextBox
+            {
+                Location = new System.Drawing.Point(10, 140),
+                Size = new System.Drawing.Size(400, 20)
+            };
             _componentName.TextChanged += _componentName_TextChanged;
             tabProps.Controls.Add(_componentName);
 
-            Label _label4 = new Label();
-            _label4.Location = new System.Drawing.Point(10, 170);
-            _label4.Size = new System.Drawing.Size(200, 20);
-            _label4.Text = Global.Form_ComponentDescription;
+            Label _label4 = new Label
+            {
+                Location = new System.Drawing.Point(10, 170),
+                Size = new System.Drawing.Size(200, 20),
+                Text = Global.Form_ComponentDescription
+            };
             tabProps.Controls.Add(_label4);
 
-            _componentDescription = new TextBox();
-            _componentDescription.Location = new System.Drawing.Point(10, 190);
-            _componentDescription.Size = new System.Drawing.Size(400, 20);
+            _componentDescription = new TextBox
+            {
+                Location = new System.Drawing.Point(10, 190),
+                Size = new System.Drawing.Size(400, 20)
+            };
             _componentDescription.TextChanged += _componentDescription_TextChanged;
             tabProps.Controls.Add(_componentDescription);
 
-            _skipInstall = new CheckBox();
-            _skipInstall.Location = new System.Drawing.Point(10, 230);
-            _skipInstall.Checked = false;
-            _skipInstall.Text = Global.Form_SkipInstall;
-            _skipInstall.AutoSize = true;
+            _skipInstall = new CheckBox
+            {
+                Location = new System.Drawing.Point(10, 230),
+                Checked = false,
+                Text = Global.Form_SkipInstall,
+                AutoSize = true
+            };
             _skipInstall.CheckedChanged += _skipInstall_CheckedChanged;
             tabProps.Controls.Add(_skipInstall);
 
             tabCtrl.TabPages.Add(tabProps);
 
-            TabPage tabAdv = new TabPage();
-            tabAdv.Name = "ConfigTabPageAdvanced";
-            tabAdv.Text = Global.Form_AdvancedTab_Title;
-            tabAdv.Height = 350;
-            tabAdv.Width = 600;
+            TabPage tabAdv = new TabPage
+            {
+                Name = "ConfigTabPageAdvanced",
+                Text = Global.Form_AdvancedTab_Title,
+                Height = 350,
+                Width = 600
+            };
             tabAdv.Click += TabAdv_Click;
 
-            Label _label6 = new Label();
-            _label6.Location = new System.Drawing.Point(10, 20);
-            _label6.Size = new System.Drawing.Size(200, 20);
-            _label6.Text = Global.Form_CommandString;
+            Label _label6 = new Label
+            {
+                Location = new System.Drawing.Point(10, 20),
+                Size = new System.Drawing.Size(200, 20),
+                Text = Global.Form_CommandString
+            };
             tabAdv.Controls.Add(_label6);
 
-            _commandString = new TextBox();
-            _commandString.Location = new System.Drawing.Point(10, 40);
-            _commandString.Size = new System.Drawing.Size(560, 200);
-            _commandString.Multiline = true;
-            _commandString.ScrollBars = ScrollBars.Vertical;
-            _commandString.Text = string.Format(Global.Yeoman_Project_DefaultCommandString, solutionName, "none", componentName, componentDescription, "webpart", skipInstallCommand);
+            _commandString = new TextBox
+            {
+                Location = new System.Drawing.Point(10, 40),
+                Size = new System.Drawing.Size(560, 200),
+                Multiline = true,
+                ScrollBars = ScrollBars.Vertical,
+                Text = string.Format(_command, solutionName, "none", componentName, componentDescription, skipInstallCommand)
+            };
             tabAdv.Controls.Add(_commandString);
 
-            Label _label7 = new Label();
-            _label7.Location = new System.Drawing.Point(10, 245);
-            _label7.Size = new System.Drawing.Size(500, 40);
-            _label7.Text = Global.Form_AdvancedTab_CommandDescription;
-            _label7.MaximumSize = new System.Drawing.Size(500, 40);
-            _label7.AutoSize = true;
+            Label _label7 = new Label
+            {
+                Location = new System.Drawing.Point(10, 245),
+                Size = new System.Drawing.Size(500, 40),
+                Text = Global.Form_AdvancedTab_CommandDescription,
+                MaximumSize = new System.Drawing.Size(500, 40),
+                AutoSize = true
+            };
             tabAdv.Controls.Add(_label7);
 
-            _showWindow = new CheckBox();
-            _showWindow.Location = new System.Drawing.Point(10, 270);
-            _showWindow.Checked = false;
-            _showWindow.Text = Global.Form_ShowCommandWIndow;
-            _showWindow.AutoSize = true;
+            _showWindow = new CheckBox
+            {
+                Location = new System.Drawing.Point(10, 270),
+                Checked = false,
+                Text = Global.Form_ShowCommandWIndow,
+                AutoSize = true
+            };
             tabAdv.Controls.Add(_showWindow);
 
             tabCtrl.TabPages.Add(tabAdv);
 
-            button1 = new Button();
-            button1.Location = new System.Drawing.Point(10, 360);
-            button1.Size = new System.Drawing.Size(100, 25);
-            button1.Text = Global.Form_ButtonGenerate;
+            button1 = new Button
+            {
+                Location = new System.Drawing.Point(10, 360),
+                Size = new System.Drawing.Size(100, 25),
+                Text = Global.Form_ButtonGenerate,
+                Enabled = false
+            };
             button1.Click += button1_Click;
-            button1.Enabled = false;
             this.Controls.Add(button1);
 
-            button2 = new Button();
-            button2.Location = new System.Drawing.Point(475, 360);
-            button2.Size = new System.Drawing.Size(100, 25);
-            button2.Text = Global.Form_ButtonCancel;
+            button2 = new Button {
+                Location = new System.Drawing.Point(475, 360),
+                Size = new System.Drawing.Size(100, 25),
+                Text = Global.Form_ButtonCancel
+            };
             button2.Click += Button2_Click;
             this.Controls.Add(button2);
 
-            Label _label5 = new Label();
-            _label5.Location = new System.Drawing.Point(10, 390);
-            _label5.Size = new System.Drawing.Size(500, 20);
-            _label5.Text = Global.Form_Footer_GeneratorText;
+            Label _label5 = new Label
+            {
+                Location = new System.Drawing.Point(10, 390),
+                Size = new System.Drawing.Size(500, 20),
+                Text = Global.Form_Footer_GeneratorText,
+            };
             this.Controls.Add(_label5);
 
             this.Controls.Add(tabCtrl);
@@ -349,7 +387,7 @@ namespace Framework.VSIX
         private void _skipInstall_CheckedChanged(object sender, EventArgs e)
         {
             skipInstallCommand = this._skipInstall.Checked == true ? Global.Form_SkipInstall_Flag : string.Empty;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            SetCommandText();
             SetSubmitState();
         }
 
@@ -362,28 +400,28 @@ namespace Framework.VSIX
         private void _componentDescription_TextChanged(object sender, EventArgs e)
         {
             componentDescription = _componentDescription.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            SetCommandText();
             SetSubmitState();
         }
 
         private void _componentName_TextChanged(object sender, EventArgs e)
         {
             componentName = _componentName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            SetCommandText();
             SetSubmitState();
         }
 
         private void _framework_SelectedIndexChanged(object sender, EventArgs e)
         {
             framework = ((KeyValuePair<string, string>)_framework.SelectedItem).Key;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            SetCommandText();
             SetSubmitState();
         }
 
         private void _solutionName_TextChanged(object sender, EventArgs e)
         {
             solutionName = _solutionName.Text;
-            _commandString.Text = string.Format(Global.Yeoman_Project_CommandString, solutionName, framework, componentName, componentDescription, "webpart", skipInstallCommand);
+            SetCommandText();
             SetSubmitState();
         }
 
@@ -395,6 +433,11 @@ namespace Framework.VSIX
         private void TabProps_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void SetCommandText()
+        {
+            _commandString.Text = string.Format(_command, solutionName, framework, componentName, componentDescription, skipInstallCommand);
         }
 
         public static string SolutionName

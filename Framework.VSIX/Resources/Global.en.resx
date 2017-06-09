@@ -187,13 +187,25 @@
   <data name="Form_SolutionName" xml:space="preserve">
     <value>Solution Name:</value>
   </data>
+  <data name="Yeoman_Generator_ExtensionsVersion" xml:space="preserve">
+    <value>1.1.0</value>
+  </data>
+  <data name="Yeoman_Generator_VersionCheck" xml:space="preserve">
+    <value>npm view @microsoft/generator-sharepoint version</value>
+  </data>
   <data name="Yeoman_Item_CommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --componentName "{0}" --componentDescription "{1}" --componentType "{2}"</value>
+    <value>yo @microsoft/sharepoint --componentName "{0}" --componentDescription "{1}"</value>
+  </data>
+  <data name="Yeoman_Item_CommandString_Extensions" xml:space="preserve">
+    <value>yo @microsoft/sharepoint --componentName "{0}" --componentDescription "{1}" --framework "{2}" --componentType "webpart"</value>
   </data>
   <data name="Yeoman_Project_CommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" --componentType "{4}" {5}</value>
+    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" {4}</value>
+  </data>
+  <data name="Yeoman_Project_CommandString_Extensions" xml:space="preserve">
+    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" --componentType "webpart" {4}</value>
   </data>
   <data name="Yeoman_Project_DefaultCommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" --componentType "{4}" {5}</value>
+    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" {4}</value>
   </data>
 </root>

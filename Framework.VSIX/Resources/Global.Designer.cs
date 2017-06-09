@@ -260,7 +260,25 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --componentName &quot;{0}&quot; --componentDescription &quot;{1}&quot; --componentType &quot;{2}&quot;.
+        ///   Looks up a localized string similar to 1.1.0.
+        /// </summary>
+        internal static string Yeoman_Generator_ExtensionsVersion {
+            get {
+                return ResourceManager.GetString("Yeoman_Generator_ExtensionsVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to npm view @microsoft/generator-sharepoint version.
+        /// </summary>
+        internal static string Yeoman_Generator_VersionCheck {
+            get {
+                return ResourceManager.GetString("Yeoman_Generator_VersionCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --componentName &quot;{0}&quot; --componentDescription &quot;{1}&quot;.
         /// </summary>
         internal static string Yeoman_Item_CommandString {
             get {
@@ -269,7 +287,16 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; --componentType &quot;{4}&quot; {5}.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --componentName &quot;{0}&quot; --componentDescription &quot;{1}&quot; --framework &quot;{2}&quot; --componentType &quot;webpart&quot;.
+        /// </summary>
+        internal static string Yeoman_Item_CommandString_Extensions {
+            get {
+                return ResourceManager.GetString("Yeoman_Item_CommandString_Extensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; {4}.
         /// </summary>
         internal static string Yeoman_Project_CommandString {
             get {
@@ -278,7 +305,16 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; --componentType &quot;{4}&quot; {5}.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; --componentType &quot;webpart&quot; {4}.
+        /// </summary>
+        internal static string Yeoman_Project_CommandString_Extensions {
+            get {
+                return ResourceManager.GetString("Yeoman_Project_CommandString_Extensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot;{4}.
         /// </summary>
         internal static string Yeoman_Project_DefaultCommandString {
             get {

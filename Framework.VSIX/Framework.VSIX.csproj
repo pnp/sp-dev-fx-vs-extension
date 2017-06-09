@@ -53,6 +53,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Global.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utility.cs" />
     <Compile Include="WebPartItemWizard.cs" />
     <Compile Include="FrameworkProjectWizard.cs" />
   </ItemGroup>
