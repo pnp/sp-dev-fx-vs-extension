@@ -3,7 +3,13 @@ The SharePoint Framework introduces a new set of tools for client-side web devel
 
 The Visual Studio Extension for SharePoint Framework wraps the command-line UI of the Microsoft Yeoman Generator (yo @microsoft/sharepoint) into a familiar Windows Forms experience, executes the generator project scaffolding behind the scenes and creates a Visual Studio project that includes all the necessary files for a complete web part project. Also included is a web part item template for adding new web parts to an existing Framework project. Developers can launch the Workbench local sandbox environment to test their web parts by pressing F5 or by binding to the Gulp Serve event in the Task Runner Explorer. For developers who wish to dive deeper and learn more about the new web development toolchain used by the Framework, the Advanced mode provides full access to the Yeoman generator command parameters and an optional cmd.exe window to view the generator tasks in real time.
 
-NOTE: Only WebPart projects are supported at this time. Support for Extensions (currently in Preview) will be added in a future release.
+  > NOTE: When using version 1.2 of the @microsoft/sharepoint generator, the process appears to hang. This version of the generator requires additional parameters. As a work-around, on the advanced tab, add the "skipFeatureDeployment" option to the command-line shown.
+
+
+    yo --solutionName "hello-world" --framework "react" --componentType "webpart" --componentName "HelloWorld" --componentDescription "HelloWorld web part" skipFeatureDeployment true
+
+
+  > NOTE: Only WebPart projects are supported at this time. Support for Extensions (currently in Preview) will be added in a future release.
 
 # Additional resources
 
