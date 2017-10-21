@@ -7,7 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+		<OutputPath>bin\Debug\</OutputPath>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>$safeprojectname$</RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
     <TargetFrameworkVersion>v$targetframeworkversion$</TargetFrameworkVersion>
@@ -16,7 +17,8 @@
     <StartProgram>C:\Windows\System32\cmd.exe</StartProgram>
     <StartArguments>/K  gulp serve</StartArguments>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -28,18 +30,6 @@
     <StartProgram>C:\Windows\System32\cmd.exe</StartProgram>
     <StartArguments>/K  gulp serve</StartArguments>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <StartAction>Program</StartAction>
-    <StartProgram>C:\Windows\System32\cmd.exe</StartProgram>
-    <StartArguments>/K  gulp serve</StartArguments>
-  </PropertyGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">

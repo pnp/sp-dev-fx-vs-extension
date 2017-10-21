@@ -143,11 +143,38 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ComponentType:.
+        /// </summary>
+        internal static string Form_ComponentType {
+            get {
+                return ResourceManager.GetString("Form_ComponentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to One or more required fields are empty..
         /// </summary>
         internal static string Form_EmptyFieldMessage {
             get {
                 return ResourceManager.GetString("Form_EmptyFieldMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Environment:.
+        /// </summary>
+        internal static string Form_Environment {
+            get {
+                return ResourceManager.GetString("Form_Environment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extension Type:.
+        /// </summary>
+        internal static string Form_ExtensionType {
+            get {
+                return ResourceManager.GetString("Form_ExtensionType", resourceCulture);
             }
         }
         
@@ -226,9 +253,18 @@ namespace Framework.VSIX.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Show command window.
         /// </summary>
-        internal static string Form_ShowCommandWIndow {
+        internal static string Form_ShowCommandWindow {
             get {
-                return ResourceManager.GetString("Form_ShowCommandWIndow", resourceCulture);
+                return ResourceManager.GetString("Form_ShowCommandWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip Feature Deployment.
+        /// </summary>
+        internal static string Form_SkipFeatureDeployment {
+            get {
+                return ResourceManager.GetString("Form_SkipFeatureDeployment", resourceCulture);
             }
         }
         
@@ -269,7 +305,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to npm view @microsoft/generator-sharepoint version.
+        ///   Looks up a localized string similar to npm list @microsoft/generator-sharepoint -g -json.
         /// </summary>
         internal static string Yeoman_Generator_VersionCheck {
             get {
@@ -301,6 +337,33 @@ namespace Framework.VSIX.Resources {
         internal static string Yeoman_Project_CommandString {
             get {
                 return ResourceManager.GetString("Yeoman_Project_CommandString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; {4}.
+        /// </summary>
+        internal static string Yeoman_Project_CommandString_1_0 {
+            get {
+                return ResourceManager.GetString("Yeoman_Project_CommandString_1_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; --componentType &quot;webpart&quot; {4}.
+        /// </summary>
+        internal static string Yeoman_Project_CommandString_1_1 {
+            get {
+                return ResourceManager.GetString("Yeoman_Project_CommandString_1_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; --componentType &quot;{5}&quot; {4}.
+        /// </summary>
+        internal static string Yeoman_Project_CommandString_1_3 {
+            get {
+                return ResourceManager.GetString("Yeoman_Project_CommandString_1_3", resourceCulture);
             }
         }
         
