@@ -148,8 +148,17 @@
   <data name="Form_ComponentName" xml:space="preserve">
     <value>Component Name:</value>
   </data>
+  <data name="Form_ComponentType" xml:space="preserve">
+    <value>Component Type:</value>
+  </data>
   <data name="Form_EmptyFieldMessage" xml:space="preserve">
     <value>One or more required fields are empty.</value>
+  </data>
+  <data name="Form_Environment" xml:space="preserve">
+    <value>Environment:</value>
+  </data>
+  <data name="Form_ExtensionType" xml:space="preserve">
+    <value>Extension Type:</value>
   </data>
   <data name="Form_Footer_GeneratorText" xml:space="preserve">
     <value>NOTE: Running the generator may take some time. Please wait while the process completes.</value>
@@ -175,8 +184,11 @@
   <data name="Form_PropertyTab_Title" xml:space="preserve">
     <value>Properties</value>
   </data>
-  <data name="Form_ShowCommandWIndow" xml:space="preserve">
+  <data name="Form_ShowCommandWindow" xml:space="preserve">
     <value>Show command window</value>
+  </data>
+  <data name="Form_SkipFeatureDeployment" xml:space="preserve">
+    <value>Skip Feature Deployment</value>
   </data>
   <data name="Form_SkipInstall" xml:space="preserve">
     <value>Do not automatically install dependencies (skip "npm install" command)</value>
@@ -191,7 +203,7 @@
     <value>1.1.0</value>
   </data>
   <data name="Yeoman_Generator_VersionCheck" xml:space="preserve">
-    <value>npm view @microsoft/generator-sharepoint version</value>
+    <value>npm list @microsoft/generator-sharepoint -g -json</value>
   </data>
   <data name="Yeoman_Item_CommandString" xml:space="preserve">
     <value>yo @microsoft/sharepoint --componentName "{0}" --componentDescription "{1}"</value>
