@@ -20,7 +20,7 @@ namespace Framework.VSIX
 		}
 
 		public void Initialize()
-		{ 
+		{
 			if (Package.GetGlobalService(typeof(IUIHostLocale)) is IUIHostLocale hostLocale)
 			{
 				var dlgFont = new UIDLGLOGFONT[] { new UIDLGLOGFONT() };
@@ -234,7 +234,7 @@ namespace Framework.VSIX
 		{
 			btnGenerate.Enabled = commandValid;
 		}
-		
+
 		private void Generate_Click(object sender, EventArgs e)
 		{
 			this.Close();

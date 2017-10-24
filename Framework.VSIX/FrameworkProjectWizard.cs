@@ -52,7 +52,7 @@ namespace Framework.VSIX
 				var genDir = projectDirInfo.Parent.FullName;
 				using (var proc = new System.Diagnostics.Process())
 				{
-					proc.StartInfo.WorkingDirectory = genDir; 
+					proc.StartInfo.WorkingDirectory = genDir;
 					proc.StartInfo.FileName = @"cmd.exe";
 
 					if (showWindow == false)
@@ -105,9 +105,9 @@ namespace Framework.VSIX
 
 				foreach (string file in files)
 				{
-					if (!file.ToLower().Contains("node_modules") && 
-						  !file.ToLower().Contains(@"\bin\") && 
-							!file.ToLower().Contains(@"\obj\") && 
+					if (!file.ToLower().Contains("node_modules") &&
+						  !file.ToLower().Contains(@"\bin\") &&
+							!file.ToLower().Contains(@"\obj\") &&
 							!file.ToLower().Contains(@"\properties\"))
 					{
 						try
