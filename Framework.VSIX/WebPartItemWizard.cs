@@ -107,9 +107,9 @@ namespace Framework.VSIX
 
 				foreach (string file in files)
 				{
-					if (!file.ToLower().Contains("node_modules") && 
-						  !file.ToLower().Contains(@"\bin\") && 
-							!file.ToLower().Contains(@"\obj\") && 
+					if (!file.ToLower().Contains("node_modules") &&
+						  !file.ToLower().Contains(@"\bin\") &&
+							!file.ToLower().Contains(@"\obj\") &&
 							!file.ToLower().Contains(@"\properties\"))
 					{
 						try

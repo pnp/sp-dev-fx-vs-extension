@@ -147,7 +147,7 @@ namespace Framework.VSIX
 
 		private void SetCommandText()
 		{
-			commandValid = Utility.SetItemCommand(Framework, ComponentName, ComponentDescription, 
+			commandValid = Utility.SetItemCommand(Framework, ComponentName, ComponentDescription,
 																						ComponentType, ExtensionType, out commandString);
 
 			txtCommandString.Text = commandString;
