@@ -9,6 +9,12 @@ namespace Framework.VSIX
 {
 	public static class Utility
 	{
+		#region Application Insights
+
+		public static string AppInsightsKey = "0475a9f1-215a-41a9-860e-c9c9a337868c";
+
+		#endregion
+
 		#region Generator Version
 
 		public static Version gv1_0 = new Version(1, 0);

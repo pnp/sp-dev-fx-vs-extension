@@ -198,7 +198,7 @@ namespace Framework.VSIX
 		}
 		public string ExtensionType
 		{
-			get { return ((KeyValuePair<string, string>)cboExtensionType.SelectedItem).Key; }
+			get { return (ComponentType == "extension") ? ((KeyValuePair<string, string>)cboExtensionType.SelectedItem).Key : String.Empty; }
 			private set { }
 		}
 		public bool ShowWindow
