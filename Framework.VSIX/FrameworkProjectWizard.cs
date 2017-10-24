@@ -9,7 +9,9 @@ using System.Text;
 using System.Resources;
 using Framework.VSIX.Resources;
 using System.Reflection;
-
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.DataContracts;
 
 namespace Framework.VSIX
 {
@@ -28,6 +30,14 @@ namespace Framework.VSIX
 		private string logFile;
 		private string commandString;
 
+		TelemetryClient telemetry = new TelemetryClient
+		{
+			InstrumentationKey = Utility.AppInsightsKey
+		};
+		Dictionary<string, string> telProps = new Dictionary<string, string>();
+		Guid telOpCtx = Guid.NewGuid();
+
+
 		public void BeforeOpeningFile(ProjectItem projectItem)
 		{
 		}
@@ -42,7 +52,7 @@ namespace Framework.VSIX
 				var genDir = projectDirInfo.Parent.FullName;
 				using (var proc = new System.Diagnostics.Process())
 				{
-					proc.StartInfo.WorkingDirectory = genDir; 
+					proc.StartInfo.WorkingDirectory = genDir;
 					proc.StartInfo.FileName = @"cmd.exe";
 
 					if (showWindow == false)
@@ -86,13 +96,18 @@ namespace Framework.VSIX
 					}
 				}
 
+				telemetry.TrackEvent("project-wizard", telProps, null);
+				// Allow some time for flushing before shutdown.
+				telemetry.Flush();
+				System.Threading.Thread.Sleep(1000);
+
 				string[] files = Directory.GetFiles(projectDir, "*.*", SearchOption.AllDirectories);
 
 				foreach (string file in files)
 				{
-					if (!file.ToLower().Contains("node_modules") && 
-						  !file.ToLower().Contains(@"\bin\") && 
-							!file.ToLower().Contains(@"\obj\") && 
+					if (!file.ToLower().Contains("node_modules") &&
+						  !file.ToLower().Contains(@"\bin\") &&
+							!file.ToLower().Contains(@"\obj\") &&
 							!file.ToLower().Contains(@"\properties\"))
 					{
 						try
@@ -105,8 +120,7 @@ namespace Framework.VSIX
 			}
 		}
 
-		public void ProjectItemFinishedGenerating(ProjectItem
-				projectItem)
+		public void ProjectItemFinishedGenerating(ProjectItem projectItem)
 		{
 		}
 
@@ -119,8 +133,15 @@ namespace Framework.VSIX
 				Dictionary<string, string> replacementsDictionary,
 				WizardRunKind runKind, object[] customParams)
 		{
+#if DEBUG
+			TelemetryConfiguration.Active.TelemetryChannel.DeveloperMode = true;
+#endif
+
 			try
 			{
+				telProps.Add("generator-version", Utility.InstalledGeneratorVersion.ToString());
+				telemetry.Context.Operation.Id = telOpCtx.ToString();
+
 				if (Utility.InstalledGeneratorVersion == new Version(0,0))
 				{
 					throw new Exception("Yeoman generator not found");
@@ -145,6 +166,12 @@ namespace Framework.VSIX
 					commandString = projectForm.CommandString;
 					showWindow = projectForm.ShowWindow;
 					skipInstall = projectForm.SkipInstall;
+
+					telProps.Add("framework", framework);
+					telProps.Add("skipInstall", skipInstall.ToString());
+					telProps.Add("environment", projectForm.Environment);
+					telProps.Add("componentType", projectForm.ComponentType);
+					telProps.Add("extensionType", projectForm.ExtensionType);
 
 					try
 					{

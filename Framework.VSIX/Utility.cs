@@ -9,6 +9,12 @@ namespace Framework.VSIX
 {
 	public static class Utility
 	{
+		#region Application Insights
+
+		public static string AppInsightsKey = "0475a9f1-215a-41a9-860e-c9c9a337868c";
+
+		#endregion
+
 		#region Generator Version
 
 		public static Version gv1_0 = new Version(1, 0);
@@ -128,7 +134,7 @@ namespace Framework.VSIX
 			if (Utility.InstalledGeneratorVersion >= gv1_3 && String.IsNullOrEmpty(Environment))
 				result = false;
 
-			command = SetCommand(SolutionName, Framework, ComponentName, ComponentDescription, 
+			command = SetCommand(SolutionName, Framework, ComponentName, ComponentDescription,
 													 ComponentType, ExtensionType, Environment, SkipFeatureDeployment, SkipInstall);
 			return result;
 		}
@@ -136,7 +142,7 @@ namespace Framework.VSIX
 			private static string SetCommand(string SolutionName, string Framework, string ComponentName,
 																			 string ComponentDescription, string ComponentType, string ExtensionType,
 																			 string Environment, bool SkipFeatureDeployment, bool SkipInstall)
-			{ 
+			{
 			StringBuilder commandBuilder = new StringBuilder();
 			commandBuilder.Append($"yo @microsoft/sharepoint");
 
