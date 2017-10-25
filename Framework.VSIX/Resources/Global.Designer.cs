@@ -19,7 +19,7 @@ namespace Framework.VSIX.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Global {
@@ -179,7 +179,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NOTE: Running the generator may take some time. Please wait while the process completes..
+        ///   Looks up a localized string similar to NOTE: If you don&apos;t skip &apos;npm install&apos;, running the generator may take up to 5-7 minutes. You should wait until it completes. .
         /// </summary>
         internal static string Form_Footer_GeneratorText {
             get {
@@ -251,7 +251,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show command window.
+        ///   Looks up a localized string similar to Show command window (if checked, you&apos;ll need to exit from command window when execute in completed).
         /// </summary>
         internal static string Form_ShowCommandWindow {
             get {

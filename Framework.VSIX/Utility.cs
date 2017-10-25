@@ -70,13 +70,23 @@ namespace Framework.VSIX
 
 					if (!String.IsNullOrEmpty(versionString))
 					{
-						result = new Version(versionString);
+                        try
+                        {
+                            result = new Version(versionString);
+                        }
+                        catch (Exception)
+                        {
+                            // This means that package existing with version value, but it contained non-number values. 
+                            // Edge scenario, but can happen with pre-release versions. We'll default to latest version.
+                            result = gv1_3;
+                        }
+						
 					}
 				}
 			}
 			catch (System.Exception ex)
 			{
-				//TODO: Log exception
+				//TODO: Log exception - no hidden to provide null value back
 			}
 
 			return result;
