@@ -31,5 +31,5 @@ deploy:
   artifact: Framework.VSIX\bin\$(configuration)\Framework.VSIX.vsix
   draft: true
   on:
-    branch:master
+    branch: master
     appveyor_repo_tag: true 
