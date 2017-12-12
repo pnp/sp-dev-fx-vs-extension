@@ -26,10 +26,12 @@ artifacts:
 deploy:
 - provider: GitHub
   release: v$(APPVEYOR_REPO_TAG_NAME)
+  description: 'Release description'
   auth_token:
     secure: zK12v9qF0HKPG0fqWlWh8nEnjXQFRTsYXm4HTNCIFMwKlcKgfEGesEpe1uPlqMIt
   artifact: Framework.VSIX\bin\$(configuration)\Framework.VSIX.vsix
   draft: true
+  prerelease: false
   on:
     branch: master
     appveyor_repo_tag: true 
