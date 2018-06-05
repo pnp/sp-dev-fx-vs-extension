@@ -9,7 +9,7 @@
     <SortOrder>1000</SortOrder>
     <TemplateID>257cf6a8-0a18-454a-a767-79aadef96d09</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
-    <DefaultName>MyWebPart</DefaultName>
+    <DefaultName>MySPFxProject</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
   </TemplateData>
@@ -21,8 +21,8 @@
     <CustomParameters>
       <CustomParameter Name="$SolutionName$" Value="MySolution"/>
       <CustomParameter Name="$Framework$" Value="none"/>
-      <CustomParameter Name="$ComponentName$" Value="MyWebPart"/>
-      <CustomParameter Name="$ComponentDescription$" Value="SharePoint Framework Web Part"/>
+      <CustomParameter Name="$ComponentName$" Value="MyComponent"/>
+      <CustomParameter Name="$ComponentDescription$" Value="SharePoint Framework Component"/>
     </CustomParameters>
   </TemplateContent>
   <WizardExtension>
