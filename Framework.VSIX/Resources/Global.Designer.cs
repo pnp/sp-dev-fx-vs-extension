@@ -314,7 +314,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --componentName &quot;{0}&quot; --componentDescription &quot;{1}&quot;.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --component-name &quot;{0}&quot; --component-description &quot;{1}&quot;.
         /// </summary>
         internal static string Yeoman_Item_CommandString {
             get {
@@ -323,7 +323,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --componentName &quot;{0}&quot; --componentDescription &quot;{1}&quot; --framework &quot;{2}&quot; --componentType &quot;webpart&quot;.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --component-name &quot;{0}&quot; --component-description &quot;{1}&quot; --framework &quot;{2}&quot; --component-type &quot;webpart&quot;.
         /// </summary>
         internal static string Yeoman_Item_CommandString_Extensions {
             get {
@@ -332,7 +332,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; {4}.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --component-name &quot;{2}&quot; --component-description &quot;{3}&quot; {4}.
         /// </summary>
         internal static string Yeoman_Project_CommandString {
             get {
@@ -341,7 +341,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; {4}.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --component-name &quot;{2}&quot; --component-description &quot;{3}&quot; {4}.
         /// </summary>
         internal static string Yeoman_Project_CommandString_1_0 {
             get {
@@ -350,7 +350,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; --componentType &quot;webpart&quot; {4}.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --component-name &quot;{2}&quot; --component-description &quot;{3}&quot; --component-type &quot;webpart&quot; {4}.
         /// </summary>
         internal static string Yeoman_Project_CommandString_1_1 {
             get {
@@ -359,7 +359,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --componentName &quot;{2}&quot; --componentDescription &quot;{3}&quot; --componentType &quot;{5}&quot; {4}.
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solutionName &quot;{0}&quot;  --framework &quot;{1}&quot; --component-name &quot;{2}&quot; --component-description &quot;{3}&quot; --component-type &quot;{5}&quot; {4}.
         /// </summary>
         internal static string Yeoman_Project_CommandString_1_3 {
             get {

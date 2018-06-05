@@ -203,22 +203,22 @@
     <value>npm list @microsoft/generator-sharepoint -g -json</value>
   </data>
   <data name="Yeoman_Item_CommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --componentName "{0}" --componentDescription "{1}"</value>
+    <value>yo @microsoft/sharepoint --component-name "{0}" --component-description "{1}"</value>
   </data>
   <data name="Yeoman_Item_CommandString_Extensions" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --componentName "{0}" --componentDescription "{1}" --framework "{2}" --componentType "webpart"</value>
+    <value>yo @microsoft/sharepoint --component-name "{0}" --component-description "{1}" --framework "{2}" --component-type "webpart"</value>
   </data>
   <data name="Yeoman_Project_CommandString" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" {4}</value>
+    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --component-name "{2}" --component-description "{3}" {4}</value>
   </data>
   <data name="Yeoman_Project_CommandString_1_0" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" {4}</value>
+    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --component-name "{2}" --component-description "{3}" {4}</value>
   </data>
   <data name="Yeoman_Project_CommandString_1_1" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" --componentType "webpart" {4}</value>
+    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --component-name "{2}" --component-description "{3}" --component-type "webpart" {4}</value>
   </data>
   <data name="Yeoman_Project_CommandString_1_3" xml:space="preserve">
-    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" --componentType "{5}" {4}</value>
+    <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --component-name "{2}" --component-description "{3}" --component-type "{5}" {4}</value>
   </data>
   <data name="Yeoman_Project_CommandString_Extensions" xml:space="preserve">
     <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --componentName "{2}" --componentDescription "{3}" --componentType "webpart" {4}</value>

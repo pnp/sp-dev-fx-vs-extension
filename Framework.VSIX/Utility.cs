@@ -20,7 +20,9 @@ namespace Framework.VSIX
 		public static Version gv1_0 = new Version(1, 0);
 		public static Version gv1_1 = new Version(1, 1);
 		public static Version gv1_3 = new Version(1, 3);
-		private static Version installedGeneratorVersion = null;
+        public static Version gv1_4 = new Version(1, 4);
+        public static Version gv1_5 = new Version(1, 5);
+        private static Version installedGeneratorVersion = null;
 		public static Version InstalledGeneratorVersion
 		{
 			get
@@ -78,7 +80,7 @@ namespace Framework.VSIX
                         {
                             // This means that package existing with version value, but it contained non-number values. 
                             // Edge scenario, but can happen with pre-release versions. We'll default to latest version.
-                            result = gv1_3;
+                            result = gv1_5;
                         }
 						
 					}
@@ -160,13 +162,13 @@ namespace Framework.VSIX
 				commandBuilder.Append($" --solutionName \"{SolutionName}\"");
 
 			if (!String.IsNullOrEmpty(ComponentName))
-				commandBuilder.Append($" --componentName \"{ComponentName}\"");
+				commandBuilder.Append($" --component-name \"{ComponentName}\"");
 
 			if (!String.IsNullOrEmpty(ComponentDescription))
-				commandBuilder.Append($" --componentDescription \"{ComponentDescription}\"");
+				commandBuilder.Append($" --component-description \"{ComponentDescription}\"");
 
 			if (!String.IsNullOrEmpty(ComponentType))
-				commandBuilder.Append($" --componentType \"{ComponentType}\"");
+				commandBuilder.Append($" --component-type \"{ComponentType}\"");
 
 			if (!String.IsNullOrEmpty(Framework))
 				commandBuilder.Append($" --framework \"{Framework}\"");
