@@ -123,7 +123,7 @@ namespace Framework.VSIX
 			this.cbxSkipFeatureDeployment.Name = "cbxSkipFeatureDeployment";
 			this.cbxSkipFeatureDeployment.Size = new System.Drawing.Size(137, 17);
 			this.cbxSkipFeatureDeployment.TabIndex = 14;
-			this.cbxSkipFeatureDeployment.Text = "skipFeatureDeployment";
+			this.cbxSkipFeatureDeployment.Text = "skip-feature-deployment";
 			this.cbxSkipFeatureDeployment.UseVisualStyleBackColor = true;
 			// 
 			// cboExtensionType

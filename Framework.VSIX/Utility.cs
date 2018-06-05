@@ -188,7 +188,7 @@ namespace Framework.VSIX
 						commandBuilder.Append($" --extensionType \"{ExtensionType}\"");
 				}
 
-				commandBuilder.AppendFormat(" skipFeatureDeployment {0}", SkipFeatureDeployment ? "true" : "false");
+				commandBuilder.AppendFormat(" skip-feature-deployment {0}", SkipFeatureDeployment ? "true" : "false");
 			}
 
 			return commandBuilder.ToString();
