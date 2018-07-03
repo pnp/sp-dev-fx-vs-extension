@@ -136,17 +136,17 @@ namespace Framework.VSIX
 
 			try
 			{
-				telProps.Add("generator-version", Utility.InstalledGeneratorVersion.ToString());
-				telemetry.Context.Operation.Id = telOpCtx.ToString();
+				//telProps.Add("generator-version", Utility.InstalledGeneratorVersion.ToString());
+				//telemetry.Context.Operation.Id = telOpCtx.ToString();
 
-				if (Utility.InstalledGeneratorVersion == new Version(0, 0))
-				{
-					throw new Exception("Yeoman generator not found");
-				}
+				//if (Utility.InstalledGeneratorVersion == new Version(0, 0))
+				//{
+				//	throw new Exception("Yeoman generator not found");
+				//}
 
 				inputForm = new AddItemForm()
 				{
-					GeneratorVersion = Utility.InstalledGeneratorVersion
+					//GeneratorVersion = Utility.InstalledGeneratorVersion
 				};
 				inputForm.Initialize();
 				inputForm.ShowDialog();

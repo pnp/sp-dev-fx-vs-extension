@@ -115,6 +115,12 @@ namespace Framework.VSIX
 			cbxSkipInstall.AutoSize = true;
 			cbxSkipInstall.CheckedChanged += SkipInstall_CheckedChanged;
 
+            // Beta Features
+            cbxPlusBeta.Text = Global.Form_PlusBeta;
+            cbxPlusBeta.Checked = false;
+            cbxPlusBeta.AutoSize = true;
+            cbxSkipInstall.CheckedChanged += CbxSkipInstall_CheckedChanged;
+
 			// Command string
 			lblCommandString.Text = Global.Form_CommandString;
 			lblCommandDescription.Text = Global.Form_AdvancedTab_CommandDescription;
@@ -130,24 +136,13 @@ namespace Framework.VSIX
 			// Footer
 			lblFooter.Text = Global.Form_Footer_GeneratorText;
 
-			// Set control visibility based on version
-			if (GeneratorVersion < Utility.gv1_1)
-			{
-				lblExtensionType.Visible = false;
-				cboExtensionType.Visible = false;
-				cbxSkipFeatureDeployment.Visible = false;
-			}
-			if (GeneratorVersion < Utility.gv1_3)
-			{
-				lblEnvironment.Visible = false;
-				cboEnvironment.Visible = false;
-			}
-
 		}
 
-		#region Control Event Handlers
+        
 
-		private void SkipFeatureDeployment_CheckedChanged(object sender, EventArgs e)
+        #region Control Event Handlers
+
+        private void SkipFeatureDeployment_CheckedChanged(object sender, EventArgs e)
 		{
 			SetCommandText();
 			SetSubmitState();
@@ -196,7 +191,13 @@ namespace Framework.VSIX
 			SetSubmitState();
 		}
 
-		private void ComponentDescription_TextChanged(object sender, EventArgs e)
+        private void CbxSkipInstall_CheckedChanged(object sender, EventArgs e)
+        {
+            SetCommandText();
+            SetSubmitState();
+        }
+
+        private void ComponentDescription_TextChanged(object sender, EventArgs e)
 		{
 			SetCommandText();
 			SetSubmitState();
@@ -225,7 +226,7 @@ namespace Framework.VSIX
 		{
 			commandValid = Utility.SetProjectCommand(SolutionName, Framework, ComponentName,
 																				ComponentDescription, ComponentType, ExtensionType,
-																				Environment, SkipFeatureDeployment, SkipInstall, out commandString);
+																				Environment, SkipFeatureDeployment, SkipInstall, PlusBeta, out commandString);
 
 			txtCommandString.Text = commandString;
 		}
@@ -250,8 +251,6 @@ namespace Framework.VSIX
 
 
 		#region Properties
-
-		public Version GeneratorVersion { get; set; }
 
 		public string SolutionName
 		{
@@ -298,6 +297,13 @@ namespace Framework.VSIX
 			get { return cbxSkipInstall.Checked; }
 			private set { }
 		}
+
+        public bool PlusBeta
+        {
+            get { return cbxPlusBeta.Checked; }
+            private set { }
+        }
+
 		public bool ShowWindow
 		{
 			get { return cbxShowWindow.Checked; }

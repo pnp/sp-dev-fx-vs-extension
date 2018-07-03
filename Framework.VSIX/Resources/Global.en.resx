@@ -161,7 +161,7 @@
     <value>Extension Type:</value>
   </data>
   <data name="Form_Footer_GeneratorText" xml:space="preserve">
-    <value>NOTE: If you don't skip 'npm install', running the generator may take up to 5-7 minutes. You should wait until it completes.</value>
+    <value>NOTE: If you don't skip 'npm install', running the generator may take several minutes. Please wait until it completes.</value>
   </data>
   <data name="Form_Framework" xml:space="preserve">
     <value>Framework:</value>
@@ -175,6 +175,9 @@
   <data name="Form_LogTab_Title" xml:space="preserve">
     <value>Log</value>
   </data>
+  <data name="Form_PlusBeta" xml:space="preserve">
+    <value>Use Beta Features</value>
+  </data>
   <data name="Form_Project_Name" xml:space="preserve">
     <value>SharePoint Framework Project Configuration</value>
   </data>
@@ -185,7 +188,7 @@
     <value>Properties</value>
   </data>
   <data name="Form_ShowCommandWindow" xml:space="preserve">
-    <value>Show command window (if checked, you'll need to exit from command window when execute in completed)</value>
+    <value>Show command window (if checked, you'll need to exit manually from the command window when execution is completed)</value>
   </data>
   <data name="Form_SkipFeatureDeployment" xml:space="preserve">
     <value>Skip Feature Deployment</value>

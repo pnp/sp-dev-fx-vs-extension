@@ -100,11 +100,11 @@ namespace Framework.VSIX
 			lblFooter.Text = Global.Form_Footer_GeneratorText;
 
 			// Set control visibility based on version
-			if (GeneratorVersion < Utility.gv1_1)
-			{
-				lblExtensionType.Visible = false;
-				cboExtensionType.Visible = false;
-			}
+			//if (GeneratorVersion < Utility.gv1_1)
+			//{
+			//	lblExtensionType.Visible = false;
+			//	cboExtensionType.Visible = false;
+			//}
 		}
 
 		#region Control Event Handlers

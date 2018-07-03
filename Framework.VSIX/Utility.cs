@@ -1,5 +1,4 @@
 ﻿using Framework.VSIX.Resources;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -12,87 +11,6 @@ namespace Framework.VSIX
 		#region Application Insights
 
 		public static string AppInsightsKey = "0475a9f1-215a-41a9-860e-c9c9a337868c";
-
-		#endregion
-
-		#region Generator Version
-
-		public static Version gv1_0 = new Version(1, 0);
-		public static Version gv1_1 = new Version(1, 1);
-		public static Version gv1_3 = new Version(1, 3);
-        public static Version gv1_4 = new Version(1, 4);
-        public static Version gv1_5 = new Version(1, 5);
-        private static Version installedGeneratorVersion = null;
-		public static Version InstalledGeneratorVersion
-		{
-			get
-			{
-				if (installedGeneratorVersion == null)
-				{
-					installedGeneratorVersion = GetGeneratorVersion();
-				}
-				return installedGeneratorVersion;
-			}
-		}
-
-		private static Version GetGeneratorVersion()
-		{
-			Version result = new Version(0, 0);
-			string versionString = string.Empty;
-
-			try
-			{
-				StringBuilder outputText = new StringBuilder();
-
-				using (var proc = new System.Diagnostics.Process())
-				{
-					proc.StartInfo.FileName = @"cmd.exe";
-					proc.StartInfo.Arguments = string.Format(@" /c  {0}", Global.Yeoman_Generator_VersionCheck);
-					proc.StartInfo.RedirectStandardInput = true;
-					proc.StartInfo.RedirectStandardOutput = true;
-					proc.StartInfo.RedirectStandardError = true;
-					proc.StartInfo.CreateNoWindow = true;
-					proc.StartInfo.UseShellExecute = false;
-					proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-					proc.Start();
-
-					proc.StandardInput.Flush();
-					proc.StandardInput.WriteLine("exit");
-					proc.StandardInput.Flush();
-
-					using (StreamReader reader = proc.StandardOutput)
-					{
-						string _val = reader.ReadToEnd();
-						outputText.Append(_val);
-					}
-
-					JObject packageJson = JObject.Parse(outputText.ToString());
-					JToken version = packageJson["dependencies"]["@microsoft/generator-sharepoint"]["version"];
-					versionString = version.Value<string>();
-
-					if (!String.IsNullOrEmpty(versionString))
-					{
-                        try
-                        {
-                            result = new Version(versionString);
-                        }
-                        catch (Exception)
-                        {
-                            // This means that package existing with version value, but it contained non-number values. 
-                            // Edge scenario, but can happen with pre-release versions. We'll default to latest version.
-                            result = gv1_5;
-                        }
-						
-					}
-				}
-			}
-			catch (System.Exception ex)
-			{
-				//TODO: Log exception - no hidden to provide null value back
-			}
-
-			return result;
-		}
 
 		#endregion
 
@@ -119,13 +37,13 @@ namespace Framework.VSIX
 				result = false;
 
 			command = SetCommand(null, Framework, ComponentName, ComponentDescription,
-													 ComponentType, ExtensionType, null, false, false);
+													 ComponentType, ExtensionType, null, false, false, false);
 			return result;
 		}
 
 		public static bool SetProjectCommand(string SolutionName, string Framework, string ComponentName,
 																				 string ComponentDescription, string ComponentType, string ExtensionType,
-																				 string Environment, bool SkipFeatureDeployment, bool SkipInstall,
+																				 string Environment, bool SkipFeatureDeployment, bool SkipInstall, bool PlusBeta,
 																				 out string command)
 		{
 			command = String.Empty;
@@ -143,17 +61,15 @@ namespace Framework.VSIX
 				result = false;
 			if (ComponentType == "extension" && String.IsNullOrEmpty(ExtensionType))
 				result = false;
-			if (Utility.InstalledGeneratorVersion >= gv1_3 && String.IsNullOrEmpty(Environment))
-				result = false;
 
 			command = SetCommand(SolutionName, Framework, ComponentName, ComponentDescription,
-													 ComponentType, ExtensionType, Environment, SkipFeatureDeployment, SkipInstall);
+													 ComponentType, ExtensionType, Environment, SkipFeatureDeployment, SkipInstall, PlusBeta);
 			return result;
 		}
 
 			private static string SetCommand(string SolutionName, string Framework, string ComponentName,
 																			 string ComponentDescription, string ComponentType, string ExtensionType,
-																			 string Environment, bool SkipFeatureDeployment, bool SkipInstall)
+																			 string Environment, bool SkipFeatureDeployment, bool SkipInstall, bool PlusBeta)
 			{
 			StringBuilder commandBuilder = new StringBuilder();
 			commandBuilder.Append($"yo @microsoft/sharepoint");
@@ -176,24 +92,18 @@ namespace Framework.VSIX
 			if (SkipInstall)
 				commandBuilder.Append(" --skip-install");
 
-			if (Utility.InstalledGeneratorVersion >= gv1_3)
-			{
-				if (!String.IsNullOrEmpty(Environment))
-					commandBuilder.Append($" --environment \"{Environment}\"");
-			}
+            if (PlusBeta)
+                commandBuilder.Append(" --plusbeta");
 
-			if (Utility.InstalledGeneratorVersion >= gv1_1)
-			{
-				if (ComponentType=="extension")
-				{
-					if (!String.IsNullOrEmpty(ExtensionType))
-						commandBuilder.Append($" --extensionType \"{ExtensionType}\"");
-				}
+            if (!String.IsNullOrEmpty(Environment))
+                commandBuilder.Append($" --environment \"{Environment}\"");
 
-				commandBuilder.AppendFormat(" skip-feature-deployment {0}", SkipFeatureDeployment ? "true" : "false");
-			}
+            if (!String.IsNullOrEmpty(ExtensionType))
+            	commandBuilder.Append($" --extensionType \"{ExtensionType}\"");
 
-			return commandBuilder.ToString();
+            commandBuilder.AppendFormat(" --skip-feature-deployment {0}", SkipFeatureDeployment ? "true" : "false");
+
+            return commandBuilder.ToString();
 		}
 		#endregion
 

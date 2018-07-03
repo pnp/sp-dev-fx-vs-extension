@@ -179,7 +179,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NOTE: If you don&apos;t skip &apos;npm install&apos;, running the generator may take up to 5-7 minutes. You should wait until it completes. .
+        ///   Looks up a localized string similar to NOTE: If you don&apos;t skip &apos;npm install&apos;, running the generator may take several minutes. Please wait until it completes..
         /// </summary>
         internal static string Form_Footer_GeneratorText {
             get {
@@ -224,6 +224,15 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Beta Features.
+        /// </summary>
+        internal static string Form_PlusBeta {
+            get {
+                return ResourceManager.GetString("Form_PlusBeta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SharePoint Framework Project Configuration.
         /// </summary>
         internal static string Form_Project_Name {
@@ -251,7 +260,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show command window (if checked, you&apos;ll need to exit from command window when execute in completed).
+        ///   Looks up a localized string similar to Show command window (if checked, you&apos;ll need to exit from command window when execution is completed).
         /// </summary>
         internal static string Form_ShowCommandWindow {
             get {

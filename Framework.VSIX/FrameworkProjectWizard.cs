@@ -29,6 +29,7 @@ namespace Framework.VSIX
 		private string projectDir;
 		private string logFile;
 		private string commandString;
+        private string environment;
 
 		TelemetryClient telemetry = new TelemetryClient
 		{
@@ -139,18 +140,18 @@ namespace Framework.VSIX
 
 			try
 			{
-				telProps.Add("generator-version", Utility.InstalledGeneratorVersion.ToString());
-				telemetry.Context.Operation.Id = telOpCtx.ToString();
+				//telProps.Add("generator-version", Utility.InstalledGeneratorVersion.ToString());
+				//telemetry.Context.Operation.Id = telOpCtx.ToString();
 
-				if (Utility.InstalledGeneratorVersion == new Version(0,0))
-				{
-					throw new Exception("Yeoman generator not found");
-				}
+				//if (Utility.InstalledGeneratorVersion == new Version(0,0))
+				//{
+				//	throw new Exception("Yeoman generator not found");
+				//}
 
 				var projectForm = new NewProjectForm()
 				{
 					SolutionName = replacementsDictionary["$safeprojectname$"],
-					GeneratorVersion = Utility.InstalledGeneratorVersion
+					//GeneratorVersion = Utility.InstalledGeneratorVersion
 				};
 				projectForm.Initialize();
 				projectForm.ShowDialog();
@@ -166,6 +167,7 @@ namespace Framework.VSIX
 					commandString = projectForm.CommandString;
 					showWindow = projectForm.ShowWindow;
 					skipInstall = projectForm.SkipInstall;
+                    environment = projectForm.Environment;
 
 					telProps.Add("framework", framework);
 					telProps.Add("skipInstall", skipInstall.ToString());
