@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="SharePoint.Framework.VSIX.94e9564e-67da-422c-b02b-501e2f45147a" Version="1.5.1.1" Language="en-US" Publisher="SharePoint PnP" />
+        <Identity Id="SharePoint.Framework.VSIX.94e9564e-67da-422c-b02b-501e2f45147a" Version="1.5.1.2" Language="en-US" Publisher="SharePoint PnP" />
         <DisplayName>SPFx Project Template</DisplayName>
         <Description xml:space="preserve">New SharePoint Framework Project.</Description>
         <MoreInfo>https://github.com/SharePoint/sp-dev-fx-vs-extension</MoreInfo>

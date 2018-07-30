@@ -9,6 +9,7 @@ using System.Text;
 using System.Resources;
 using Framework.VSIX.Resources;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.DataContracts;
@@ -56,40 +57,47 @@ namespace Framework.VSIX
 					proc.StartInfo.WorkingDirectory = genDir;
 					proc.StartInfo.FileName = @"cmd.exe";
 
+                    Task<string> outTask = null;
+                    Task<string> errTask = null;
+                    
 					if (showWindow == false)
 					{
-						proc.StartInfo.Arguments = string.Format(@" /c  {0}", commandString);
-						proc.StartInfo.RedirectStandardInput = true;
-						proc.StartInfo.RedirectStandardOutput = true;
-						proc.StartInfo.RedirectStandardError = true;
-						proc.StartInfo.CreateNoWindow = true;
-						proc.StartInfo.UseShellExecute = false;
-						proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-						proc.Start();
+                        try
+                        {
+                            proc.StartInfo.Arguments = string.Format(@" /c  {0}", commandString);
+                            proc.StartInfo.RedirectStandardInput = true;
+                            proc.StartInfo.RedirectStandardOutput = true;
+                            proc.StartInfo.RedirectStandardError = true;
+                            proc.StartInfo.CreateNoWindow = true;
+                            proc.StartInfo.UseShellExecute = false;
+                            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                            proc.Start();
 
-						proc.StandardInput.Flush();
-						proc.StandardInput.WriteLine("exit");
-						proc.StandardInput.Flush();
+                            proc.StandardInput.Flush();
+                            proc.StandardInput.WriteLine("exit");
+                            proc.StandardInput.Flush();
 
-						using (StreamReader reader = proc.StandardOutput)
-						{
-							string result = reader.ReadToEnd();
-							outputText.Append(result);
-						}
-
-						using (StreamReader reader = proc.StandardError)
-						{
-							string result = reader.ReadToEnd();
-							outputText.Append(result);
-						}
+                            outTask = Task.Run(() => proc.StandardOutput.ReadToEndAsync());
+                            errTask = Task.Run(() => proc.StandardError.ReadToEndAsync());
+                        }
+                        catch (System.Exception ex)
+                        {
+                            //TODO: Log Error
+                        }
 					}
 					else
 					{
 						proc.StartInfo.Arguments = string.Format(@" /k  {0}", commandString);
 						proc.Start();
 					}
+                    
+                    proc.WaitForExit();
 
-					proc.WaitForExit();
+                    if (showWindow == false)
+                    {
+                        outputText.Append(outTask.Result);
+                        outputText.Append(errTask.Result);
+                    }
 
 					using (StreamWriter sw = File.AppendText(logFile))
 					{
@@ -97,10 +105,17 @@ namespace Framework.VSIX
 					}
 				}
 
-				telemetry.TrackEvent("project-wizard", telProps, null);
-				// Allow some time for flushing before shutdown.
-				telemetry.Flush();
-				System.Threading.Thread.Sleep(1000);
+                try
+                {
+                    telemetry.TrackEvent("project-wizard", telProps, null);
+                    // Allow some time for flushing before shutdown.
+                    telemetry.Flush();
+                    System.Threading.Thread.Sleep(1000);
+                }
+                catch (System.Exception ex)
+                {
+                    //TODO: Log error
+                }
 
 				string[] files = Directory.GetFiles(projectDir, "*.*", SearchOption.AllDirectories);
 
