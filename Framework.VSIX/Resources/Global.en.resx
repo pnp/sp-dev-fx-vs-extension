@@ -184,6 +184,48 @@
   <data name="Form_Project_Title" xml:space="preserve">
     <value>SharePoint Framework Project Configuration</value>
   </data>
+  <data name="Form_Prompt_ComponentType_Extension" xml:space="preserve">
+    <value>Extension</value>
+  </data>
+  <data name="Form_Prompt_ComponentType_Extension_1" xml:space="preserve">
+    <value>Application Customizer</value>
+  </data>
+  <data name="Form_Prompt_ComponentType_Extension_2" xml:space="preserve">
+    <value>Field Customizer</value>
+  </data>
+  <data name="Form_Prompt_ComponentType_Extension_3" xml:space="preserve">
+    <value>Command Set</value>
+  </data>
+  <data name="Form_Prompt_ComponentType_WebPart" xml:space="preserve">
+    <value>Web Part</value>
+  </data>
+  <data name="Form_Prompt_Domain_Isolated_Label" xml:space="preserve">
+    <value>Components require permissions to access web API's that are unique and not shared with other components in the tenant?</value>
+  </data>
+  <data name="Form_Prompt_Environment_Label" xml:space="preserve">
+    <value>Baseline Packages</value>
+  </data>
+  <data name="Form_Prompt_Environment_Option1" xml:space="preserve">
+    <value>SharePoint Online only (latest)</value>
+  </data>
+  <data name="Form_Prompt_Environment_Option2" xml:space="preserve">
+    <value>SharePoint 2016 onwards, including 2018 and SharePoint Online</value>
+  </data>
+  <data name="Form_Prompt_Environment_Option3" xml:space="preserve">
+    <value>SharePoint 2019 onwards, including SharePoint Online</value>
+  </data>
+  <data name="Form_Prompt_PackageManager_Label" xml:space="preserve">
+    <value>Package Manager:</value>
+  </data>
+  <data name="Form_Prompt_PlusBeta_Label" xml:space="preserve">
+    <value>Include preview (beta) features?</value>
+  </data>
+  <data name="Form_Prompt_SkipFeature_Label" xml:space="preserve">
+    <value>Skip feature deployment?</value>
+  </data>
+  <data name="Form_Prompt_SkipInstall_Label" xml:space="preserve">
+    <value>Skip running "npm install" command?</value>
+  </data>
   <data name="Form_PropertyTab_Title" xml:space="preserve">
     <value>Properties</value>
   </data>
@@ -216,6 +258,9 @@
   </data>
   <data name="Yeoman_Project_CommandString" xml:space="preserve">
     <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --component-name "{2}" --component-description "{3}" {4}</value>
+  </data>
+  <data name="Yeoman_Project_CommandString_1_7" xml:space="preserve">
+    <value>yo @microsoft/sharepoint --solution-Name "{0}"  --framework "{1}" --component-name "{2}" --component-description "{3}" --component-type "{4}" --environment "{5}" --package-manager "{6}" --is-domain-isolated "{7}" --skip-cache "true" {8}</value>
   </data>
   <data name="Yeoman_Project_CommandString_Extensions" xml:space="preserve">
     <value>yo @microsoft/sharepoint --solutionName "{0}"  --framework "{1}" --component-name "{2}" --componentdescription "{3}" --component-type "webpart" {4}</value>

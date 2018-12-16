@@ -51,18 +51,21 @@ namespace Framework.VSIX
 				{ "knockout", "knockout" }
 			};
 			cboFramework.DataSource = new BindingSource(cboFrameworkSource, null);
+            cboFramework.SelectedIndex = 0;
 			cboFramework.DisplayMember = "Value";
 			cboFramework.ValueMember = "Key";
 			cboFramework.SelectedIndexChanged += Framework_SelectedIndexChanged;
 
 			// Environment
-			lblEnvironment.Text = Global.Form_Environment;
+			lblEnvironment.Text = Global.Form_Prompt_Environment_Label;
 			Dictionary<string, string> cboEnvironmentSource = new Dictionary<string, string>
 			{
-				{ "spo", "spo" },
-				{ "onprem", "onprem" }
+				{ "spo", Global.Form_Prompt_Environment_Option1 },
+				{ "onprem", Global.Form_Prompt_Environment_Option2 },
+                { "onprem19", Global.Form_Prompt_Environment_Option3 }
 			};
 			cboEnvironment.DataSource = new BindingSource(cboEnvironmentSource, null);
+            cboEnvironment.SelectedIndex = 0;
 			cboEnvironment.DisplayMember = "Value";
 			cboEnvironment.ValueMember = "Key";
 			cboEnvironment.SelectedIndexChanged += Environment_SelectedIndexChanged;
@@ -80,10 +83,11 @@ namespace Framework.VSIX
 			lblComponentType.Text = Global.Form_ComponentType;
 			Dictionary<string, string> cboComponentTypeSource = new Dictionary<string, string>
 			{
-				{ "webpart", "webpart" },
-				{ "extension", "extension" }
+				{ "webpart", Global.Form_Prompt_ComponentType_WebPart },
+				{ "extension", Global.Form_Prompt_ComponentType_Extension }
 			};
 			cboComponentType.DataSource = new BindingSource(cboComponentTypeSource, null);
+            cboComponentType.SelectedIndex = 0;
 			cboComponentType.DisplayMember = "Value";
 			cboComponentType.ValueMember = "Key";
 			cboComponentType.SelectedIndexChanged += ComponentType_SelectedIndexChanged;
@@ -94,29 +98,51 @@ namespace Framework.VSIX
 			cboExtensionType.Visible = false;
 			Dictionary<string, string> cboExtensionTypeSource = new Dictionary<string, string>
 			{
-				{ "ApplicationCustomizer", "Application Customizer" },
-				{ "FieldCustomizer", "Field Customizer" },
-				{ "ListViewCommandSet", "List View CommandSet" }
+				{ "ApplicationCustomizer", Global.Form_Prompt_ComponentType_Extension_1 },
+				{ "FieldCustomizer", Global.Form_Prompt_ComponentType_Extension_2 },
+				{ "ListViewCommandSet", Global.Form_Prompt_ComponentType_Extension_3 }
 			};
 			cboExtensionType.DataSource = new BindingSource(cboExtensionTypeSource, null);
-			cboExtensionType.DisplayMember = "Value";
+            cboExtensionType.DisplayMember = "Value";
 			cboExtensionType.ValueMember = "Key";
 			cboExtensionType.SelectedIndexChanged += ExtensionType_SelectedIndexChanged;
 
-			// Skip Feature Deployment
-			cbxSkipFeatureDeployment.Text = Global.Form_SkipFeatureDeployment;
+            // Package Manager
+            lblPackageManager.Visible = true;
+            lblPackageManager.Text = Global.Form_Prompt_PackageManager_Label;
+            cboPackageManager.Visible = true;
+            Dictionary<string, string> cboPackageManagerSource = new Dictionary<string, string>
+            {
+                { "npm", "NPM" },
+                { "pnpm", "PNPM" },
+                { "yarn", "Yarn" }
+            };
+            cboPackageManager.DataSource = new BindingSource(cboPackageManagerSource, null);
+            cboPackageManager.SelectedIndex = 0;
+            cboPackageManager.DisplayMember = "Value";
+            cboPackageManager.ValueMember = "Key";
+            cboPackageManager.SelectedIndexChanged += cboPackageManager_SelectedIndexChanged;
+
+            // Skip Feature Deployment
+            cbxSkipFeatureDeployment.Text = Global.Form_Prompt_SkipFeature_Label;
 			cbxSkipFeatureDeployment.Checked = false;
 			cbxSkipFeatureDeployment.AutoSize = true;
 			cbxSkipFeatureDeployment.CheckedChanged += SkipFeatureDeployment_CheckedChanged;
 
 			// Skip NPM Install
-			cbxSkipInstall.Text = Global.Form_SkipInstall;
+			cbxSkipInstall.Text = Global.Form_Prompt_SkipInstall_Label;
 			cbxSkipInstall.Checked = false;
 			cbxSkipInstall.AutoSize = true;
 			cbxSkipInstall.CheckedChanged += SkipInstall_CheckedChanged;
 
+            //Domain Isolation
+            cbxDomainIsolated.Text = Global.Form_Prompt_Domain_Isolated_Label;
+            cbxDomainIsolated.Checked = false;
+            cbxDomainIsolated.AutoSize = false;
+            cbxDomainIsolated.CheckedChanged += cbxDomainIsolated_CheckedChanged;
+
             // Beta Features
-            cbxPlusBeta.Text = Global.Form_PlusBeta;
+            cbxPlusBeta.Text = Global.Form_Prompt_PlusBeta_Label;
             cbxPlusBeta.Checked = false;
             cbxPlusBeta.AutoSize = true;
             cbxSkipInstall.CheckedChanged += CbxSkipInstall_CheckedChanged;
@@ -137,8 +163,6 @@ namespace Framework.VSIX
 			lblFooter.Text = Global.Form_Footer_GeneratorText;
 
 		}
-
-        
 
         #region Control Event Handlers
 
@@ -175,11 +199,13 @@ namespace Framework.VSIX
 			{
 				lblExtensionType.Visible = true;
 				cboExtensionType.Visible = true;
+                cbxDomainIsolated.Visible = false;
 			}
 			else
 			{
 				lblExtensionType.Visible = false;
 				cboExtensionType.Visible = false;
+                cbxDomainIsolated.Visible = true;
 			}
 			SetCommandText();
 			SetSubmitState();
@@ -222,11 +248,32 @@ namespace Framework.VSIX
 			SetSubmitState();
 		}
 
-		private void SetCommandText()
+        private void cboPackageManager_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetCommandText();
+            SetSubmitState();
+        }
+
+        private void cbxDomainIsolated_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbxDomainIsolated.Checked)
+            {
+                cboComponentType.SelectedValue = "webpart";
+                cboComponentType.Enabled = false;
+            }
+            else
+            {
+                cboComponentType.Enabled = true;
+            }
+            SetCommandText();
+            SetSubmitState();
+        }
+
+        private void SetCommandText()
 		{
 			commandValid = Utility.SetProjectCommand(SolutionName, Framework, ComponentName,
 																				ComponentDescription, ComponentType, ExtensionType,
-																				Environment, SkipFeatureDeployment, SkipInstall, PlusBeta, out commandString);
+																				Environment, SkipFeatureDeployment, SkipInstall, PlusBeta, PackageManager, DomainIsolated, out commandString);
 
 			txtCommandString.Text = commandString;
 		}
@@ -320,7 +367,20 @@ namespace Framework.VSIX
 			private set { }
 		}
 
-		#endregion
+        public string PackageManager
+        {
+            get { return ((KeyValuePair<string, string>)cboPackageManager.SelectedItem).Key; }
+            private set { }
+        }
 
-	}
+        public bool DomainIsolated
+        {
+            get { return cbxDomainIsolated.Checked; }
+            private set { }
+        }
+
+        #endregion
+
+
+    }
 }

@@ -32,6 +32,10 @@ namespace Framework.VSIX
     {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabProps = new System.Windows.Forms.TabPage();
+            this.cbxDomainIsolated = new System.Windows.Forms.CheckBox();
+            this.cboPackageManager = new System.Windows.Forms.ComboBox();
+            this.lblPackageManager = new System.Windows.Forms.Label();
+            this.cbxPlusBeta = new System.Windows.Forms.CheckBox();
             this.cboEnvironment = new System.Windows.Forms.ComboBox();
             this.lblEnvironment = new System.Windows.Forms.Label();
             this.cbxSkipFeatureDeployment = new System.Windows.Forms.CheckBox();
@@ -56,7 +60,6 @@ namespace Framework.VSIX
             this.btnGenerate = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblFooter = new System.Windows.Forms.Label();
-            this.cbxPlusBeta = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabProps.SuspendLayout();
             this.tabAdv.SuspendLayout();
@@ -70,11 +73,14 @@ namespace Framework.VSIX
             this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(585, 400);
+            this.tabControl1.Size = new System.Drawing.Size(585, 505);
             this.tabControl1.TabIndex = 0;
             // 
             // tabProps
             // 
+            this.tabProps.Controls.Add(this.cbxDomainIsolated);
+            this.tabProps.Controls.Add(this.cboPackageManager);
+            this.tabProps.Controls.Add(this.lblPackageManager);
             this.tabProps.Controls.Add(this.cbxPlusBeta);
             this.tabProps.Controls.Add(this.cboEnvironment);
             this.tabProps.Controls.Add(this.lblEnvironment);
@@ -96,23 +102,63 @@ namespace Framework.VSIX
             this.tabProps.Margin = new System.Windows.Forms.Padding(4, 13, 4, 13);
             this.tabProps.Name = "tabProps";
             this.tabProps.Padding = new System.Windows.Forms.Padding(4, 13, 4, 13);
-            this.tabProps.Size = new System.Drawing.Size(577, 374);
+            this.tabProps.Size = new System.Drawing.Size(577, 479);
             this.tabProps.TabIndex = 0;
             this.tabProps.Text = global::Framework.VSIX.Resources.Global.Form_PropertyTab_Title;
             this.tabProps.UseVisualStyleBackColor = true;
             // 
+            // cbxDomainIsolated
+            // 
+            this.cbxDomainIsolated.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.cbxDomainIsolated.Location = new System.Drawing.Point(10, 438);
+            this.cbxDomainIsolated.Name = "cbxDomainIsolated";
+            this.cbxDomainIsolated.Size = new System.Drawing.Size(538, 38);
+            this.cbxDomainIsolated.TabIndex = 20;
+            this.cbxDomainIsolated.Text = "domainIsolated";
+            this.cbxDomainIsolated.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.cbxDomainIsolated.UseVisualStyleBackColor = true;
+            this.cbxDomainIsolated.CheckedChanged += new System.EventHandler(this.cbxDomainIsolated_CheckedChanged);
+            // 
+            // cboPackageManager
+            // 
+            this.cboPackageManager.FormattingEnabled = true;
+            this.cboPackageManager.Location = new System.Drawing.Point(10, 240);
+            this.cboPackageManager.Name = "cboPackageManager";
+            this.cboPackageManager.Size = new System.Drawing.Size(150, 21);
+            this.cboPackageManager.TabIndex = 19;
+            this.cboPackageManager.SelectedIndexChanged += new System.EventHandler(this.cboPackageManager_SelectedIndexChanged);
+            // 
+            // lblPackageManager
+            // 
+            this.lblPackageManager.AutoSize = true;
+            this.lblPackageManager.Location = new System.Drawing.Point(13, 220);
+            this.lblPackageManager.Name = "lblPackageManager";
+            this.lblPackageManager.Size = new System.Drawing.Size(95, 13);
+            this.lblPackageManager.TabIndex = 18;
+            this.lblPackageManager.Text = "Package Manager";
+            // 
+            // cbxPlusBeta
+            // 
+            this.cbxPlusBeta.AutoSize = true;
+            this.cbxPlusBeta.Location = new System.Drawing.Point(321, 385);
+            this.cbxPlusBeta.Name = "cbxPlusBeta";
+            this.cbxPlusBeta.Size = new System.Drawing.Size(66, 17);
+            this.cbxPlusBeta.TabIndex = 17;
+            this.cbxPlusBeta.Text = "plusbeta";
+            this.cbxPlusBeta.UseVisualStyleBackColor = true;
+            // 
             // cboEnvironment
             // 
             this.cboEnvironment.FormattingEnabled = true;
-            this.cboEnvironment.Location = new System.Drawing.Point(290, 90);
+            this.cboEnvironment.Location = new System.Drawing.Point(187, 90);
             this.cboEnvironment.Name = "cboEnvironment";
-            this.cboEnvironment.Size = new System.Drawing.Size(120, 21);
+            this.cboEnvironment.Size = new System.Drawing.Size(361, 21);
             this.cboEnvironment.TabIndex = 16;
             // 
             // lblEnvironment
             // 
             this.lblEnvironment.AutoSize = true;
-            this.lblEnvironment.Location = new System.Drawing.Point(290, 70);
+            this.lblEnvironment.Location = new System.Drawing.Point(187, 70);
             this.lblEnvironment.Name = "lblEnvironment";
             this.lblEnvironment.Size = new System.Drawing.Size(66, 13);
             this.lblEnvironment.TabIndex = 15;
@@ -121,7 +167,7 @@ namespace Framework.VSIX
             // cbxSkipFeatureDeployment
             // 
             this.cbxSkipFeatureDeployment.AutoSize = true;
-            this.cbxSkipFeatureDeployment.Location = new System.Drawing.Point(10, 320);
+            this.cbxSkipFeatureDeployment.Location = new System.Drawing.Point(10, 385);
             this.cbxSkipFeatureDeployment.Name = "cbxSkipFeatureDeployment";
             this.cbxSkipFeatureDeployment.Size = new System.Drawing.Size(138, 17);
             this.cbxSkipFeatureDeployment.TabIndex = 14;
@@ -131,7 +177,7 @@ namespace Framework.VSIX
             // cboExtensionType
             // 
             this.cboExtensionType.FormattingEnabled = true;
-            this.cboExtensionType.Location = new System.Drawing.Point(10, 290);
+            this.cboExtensionType.Location = new System.Drawing.Point(10, 342);
             this.cboExtensionType.Name = "cboExtensionType";
             this.cboExtensionType.Size = new System.Drawing.Size(150, 21);
             this.cboExtensionType.TabIndex = 12;
@@ -139,7 +185,7 @@ namespace Framework.VSIX
             // lblExtensionType
             // 
             this.lblExtensionType.AutoSize = true;
-            this.lblExtensionType.Location = new System.Drawing.Point(10, 270);
+            this.lblExtensionType.Location = new System.Drawing.Point(13, 322);
             this.lblExtensionType.Name = "lblExtensionType";
             this.lblExtensionType.Size = new System.Drawing.Size(83, 13);
             this.lblExtensionType.TabIndex = 11;
@@ -149,7 +195,7 @@ namespace Framework.VSIX
             // cboComponentType
             // 
             this.cboComponentType.FormattingEnabled = true;
-            this.cboComponentType.Location = new System.Drawing.Point(10, 240);
+            this.cboComponentType.Location = new System.Drawing.Point(10, 292);
             this.cboComponentType.Name = "cboComponentType";
             this.cboComponentType.Size = new System.Drawing.Size(150, 21);
             this.cboComponentType.TabIndex = 10;
@@ -157,7 +203,7 @@ namespace Framework.VSIX
             // lblComponentType
             // 
             this.lblComponentType.AutoSize = true;
-            this.lblComponentType.Location = new System.Drawing.Point(10, 220);
+            this.lblComponentType.Location = new System.Drawing.Point(13, 272);
             this.lblComponentType.Name = "lblComponentType";
             this.lblComponentType.Size = new System.Drawing.Size(85, 13);
             this.lblComponentType.TabIndex = 9;
@@ -166,7 +212,7 @@ namespace Framework.VSIX
             // cbxSkipInstall
             // 
             this.cbxSkipInstall.AutoSize = true;
-            this.cbxSkipInstall.Location = new System.Drawing.Point(10, 350);
+            this.cbxSkipInstall.Location = new System.Drawing.Point(10, 412);
             this.cbxSkipInstall.Name = "cbxSkipInstall";
             this.cbxSkipInstall.Size = new System.Drawing.Size(72, 17);
             this.cbxSkipInstall.TabIndex = 8;
@@ -177,7 +223,7 @@ namespace Framework.VSIX
             // 
             this.txtComponentDescription.Location = new System.Drawing.Point(10, 190);
             this.txtComponentDescription.Name = "txtComponentDescription";
-            this.txtComponentDescription.Size = new System.Drawing.Size(400, 20);
+            this.txtComponentDescription.Size = new System.Drawing.Size(538, 20);
             this.txtComponentDescription.TabIndex = 7;
             // 
             // lblComponentDescription
@@ -193,7 +239,7 @@ namespace Framework.VSIX
             // 
             this.txtComponentName.Location = new System.Drawing.Point(10, 140);
             this.txtComponentName.Name = "txtComponentName";
-            this.txtComponentName.Size = new System.Drawing.Size(400, 20);
+            this.txtComponentName.Size = new System.Drawing.Size(538, 20);
             this.txtComponentName.TabIndex = 5;
             // 
             // lblComponentName
@@ -229,7 +275,7 @@ namespace Framework.VSIX
             this.txtSolutionName.Enabled = false;
             this.txtSolutionName.Location = new System.Drawing.Point(10, 40);
             this.txtSolutionName.Name = "txtSolutionName";
-            this.txtSolutionName.Size = new System.Drawing.Size(400, 20);
+            this.txtSolutionName.Size = new System.Drawing.Size(538, 20);
             this.txtSolutionName.TabIndex = 1;
             // 
             // lblSolutionName
@@ -251,7 +297,7 @@ namespace Framework.VSIX
             this.tabAdv.Margin = new System.Windows.Forms.Padding(4, 13, 4, 13);
             this.tabAdv.Name = "tabAdv";
             this.tabAdv.Padding = new System.Windows.Forms.Padding(4, 13, 4, 13);
-            this.tabAdv.Size = new System.Drawing.Size(577, 374);
+            this.tabAdv.Size = new System.Drawing.Size(577, 479);
             this.tabAdv.TabIndex = 1;
             this.tabAdv.Text = "Advanced";
             this.tabAdv.UseVisualStyleBackColor = true;
@@ -294,7 +340,7 @@ namespace Framework.VSIX
             // 
             // btnGenerate
             // 
-            this.btnGenerate.Location = new System.Drawing.Point(10, 410);
+            this.btnGenerate.Location = new System.Drawing.Point(10, 517);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(75, 23);
             this.btnGenerate.TabIndex = 1;
@@ -304,7 +350,7 @@ namespace Framework.VSIX
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(475, 410);
+            this.btnCancel.Location = new System.Drawing.Point(475, 517);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -315,27 +361,17 @@ namespace Framework.VSIX
             // lblFooter
             // 
             this.lblFooter.AutoSize = true;
-            this.lblFooter.Location = new System.Drawing.Point(10, 440);
+            this.lblFooter.Location = new System.Drawing.Point(10, 547);
             this.lblFooter.Name = "lblFooter";
             this.lblFooter.Size = new System.Drawing.Size(47, 13);
             this.lblFooter.TabIndex = 3;
             this.lblFooter.Text = "lblFooter";
             // 
-            // cbxPlusBeta
-            // 
-            this.cbxPlusBeta.AutoSize = true;
-            this.cbxPlusBeta.Location = new System.Drawing.Point(290, 320);
-            this.cbxPlusBeta.Name = "cbxPlusBeta";
-            this.cbxPlusBeta.Size = new System.Drawing.Size(66, 17);
-            this.cbxPlusBeta.TabIndex = 17;
-            this.cbxPlusBeta.Text = "plusbeta";
-            this.cbxPlusBeta.UseVisualStyleBackColor = true;
-            // 
             // NewProjectForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 461);
+            this.ClientSize = new System.Drawing.Size(583, 580);
             this.Controls.Add(this.lblFooter);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnGenerate);
@@ -383,5 +419,8 @@ namespace Framework.VSIX
 		private System.Windows.Forms.ComboBox cboEnvironment;
 		private System.Windows.Forms.Label lblEnvironment;
         private System.Windows.Forms.CheckBox cbxPlusBeta;
+        private System.Windows.Forms.ComboBox cboPackageManager;
+        private System.Windows.Forms.Label lblPackageManager;
+        private System.Windows.Forms.CheckBox cbxDomainIsolated;
     }
 }

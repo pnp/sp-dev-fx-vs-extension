@@ -37,13 +37,13 @@ namespace Framework.VSIX
 				result = false;
 
 			command = SetCommand(null, Framework, ComponentName, ComponentDescription,
-													 ComponentType, ExtensionType, null, false, false, false);
+													 ComponentType, ExtensionType, null, false, false, false, null, false);
 			return result;
 		}
 
 		public static bool SetProjectCommand(string SolutionName, string Framework, string ComponentName,
 																				 string ComponentDescription, string ComponentType, string ExtensionType,
-																				 string Environment, bool SkipFeatureDeployment, bool SkipInstall, bool PlusBeta,
+																				 string Environment, bool SkipFeatureDeployment, bool SkipInstall, bool PlusBeta, string PackageManager, bool DomainIsolated,
 																				 out string command)
 		{
 			command = String.Empty;
@@ -63,19 +63,19 @@ namespace Framework.VSIX
 				result = false;
 
 			command = SetCommand(SolutionName, Framework, ComponentName, ComponentDescription,
-													 ComponentType, ExtensionType, Environment, SkipFeatureDeployment, SkipInstall, PlusBeta);
+													 ComponentType, ExtensionType, Environment, SkipFeatureDeployment, SkipInstall, PlusBeta, PackageManager, DomainIsolated);
 			return result;
 		}
 
 			private static string SetCommand(string SolutionName, string Framework, string ComponentName,
 																			 string ComponentDescription, string ComponentType, string ExtensionType,
-																			 string Environment, bool SkipFeatureDeployment, bool SkipInstall, bool PlusBeta)
+																			 string Environment, bool SkipFeatureDeployment, bool SkipInstall, bool PlusBeta, string PackageManager, bool DomainIsolated)
 			{
 			StringBuilder commandBuilder = new StringBuilder();
 			commandBuilder.Append($"yo @microsoft/sharepoint");
 
 			if (!String.IsNullOrEmpty(SolutionName))
-				commandBuilder.Append($" --solutionName \"{SolutionName}\"");
+				commandBuilder.Append($" --solution-name \"{SolutionName}\"");
 
 			if (!String.IsNullOrEmpty(ComponentName))
 				commandBuilder.Append($" --component-name \"{ComponentName}\"");
@@ -99,9 +99,20 @@ namespace Framework.VSIX
                 commandBuilder.Append($" --environment \"{Environment}\"");
 
             if (!String.IsNullOrEmpty(ExtensionType))
-            	commandBuilder.Append($" --extensionType \"{ExtensionType}\"");
+            	commandBuilder.Append($" --extension-type \"{ExtensionType}\"");
 
-            commandBuilder.AppendFormat(" --skip-feature-deployment {0}", SkipFeatureDeployment ? "true" : "false");
+            if (!String.IsNullOrEmpty(PackageManager))
+            {
+                commandBuilder.Append($" --package-manager \"{PackageManager}\"");
+            }
+
+            if (SkipFeatureDeployment)
+                commandBuilder.Append(" --skip-feature-deployment");
+
+            if (DomainIsolated)
+                commandBuilder.Append(" --is-domain-isolated");
+
+            commandBuilder.Append(" --skip-cache");
 
             return commandBuilder.ToString();
 		}

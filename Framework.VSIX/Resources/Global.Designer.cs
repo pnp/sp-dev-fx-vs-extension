@@ -251,6 +251,132 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extension.
+        /// </summary>
+        internal static string Form_Prompt_ComponentType_Extension {
+            get {
+                return ResourceManager.GetString("Form_Prompt_ComponentType_Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Customizer.
+        /// </summary>
+        internal static string Form_Prompt_ComponentType_Extension_1 {
+            get {
+                return ResourceManager.GetString("Form_Prompt_ComponentType_Extension_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field Customizer.
+        /// </summary>
+        internal static string Form_Prompt_ComponentType_Extension_2 {
+            get {
+                return ResourceManager.GetString("Form_Prompt_ComponentType_Extension_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command Set.
+        /// </summary>
+        internal static string Form_Prompt_ComponentType_Extension_3 {
+            get {
+                return ResourceManager.GetString("Form_Prompt_ComponentType_Extension_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Part.
+        /// </summary>
+        internal static string Form_Prompt_ComponentType_WebPart {
+            get {
+                return ResourceManager.GetString("Form_Prompt_ComponentType_WebPart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Components require permissions to access web API&apos;s that are unique and not shared with other components in the tenant?.
+        /// </summary>
+        internal static string Form_Prompt_Domain_Isolated_Label {
+            get {
+                return ResourceManager.GetString("Form_Prompt_Domain_Isolated_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Baseline Packages.
+        /// </summary>
+        internal static string Form_Prompt_Environment_Label {
+            get {
+                return ResourceManager.GetString("Form_Prompt_Environment_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SharePoint Online only (latest).
+        /// </summary>
+        internal static string Form_Prompt_Environment_Option1 {
+            get {
+                return ResourceManager.GetString("Form_Prompt_Environment_Option1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SharePoint 2016 onwards, including 2018 and SharePoint Online.
+        /// </summary>
+        internal static string Form_Prompt_Environment_Option2 {
+            get {
+                return ResourceManager.GetString("Form_Prompt_Environment_Option2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SharePoint 2019 onwards, including SharePoint Online.
+        /// </summary>
+        internal static string Form_Prompt_Environment_Option3 {
+            get {
+                return ResourceManager.GetString("Form_Prompt_Environment_Option3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Manager:.
+        /// </summary>
+        internal static string Form_Prompt_PackageManager_Label {
+            get {
+                return ResourceManager.GetString("Form_Prompt_PackageManager_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include preview (beta) features?.
+        /// </summary>
+        internal static string Form_Prompt_PlusBeta_Label {
+            get {
+                return ResourceManager.GetString("Form_Prompt_PlusBeta_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip feature deployment?.
+        /// </summary>
+        internal static string Form_Prompt_SkipFeature_Label {
+            get {
+                return ResourceManager.GetString("Form_Prompt_SkipFeature_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip running &quot;npm install&quot; command?.
+        /// </summary>
+        internal static string Form_Prompt_SkipInstall_Label {
+            get {
+                return ResourceManager.GetString("Form_Prompt_SkipInstall_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Properties.
         /// </summary>
         internal static string Form_PropertyTab_Title {
@@ -373,6 +499,15 @@ namespace Framework.VSIX.Resources {
         internal static string Yeoman_Project_CommandString_1_3 {
             get {
                 return ResourceManager.GetString("Yeoman_Project_CommandString_1_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to yo @microsoft/sharepoint --solution-Name &quot;{0}&quot;  --framework &quot;{1}&quot; --component-name &quot;{2}&quot; --component-description &quot;{3}&quot; --component-type &quot;{4}&quot; --environment &quot;{5}&quot; --package-manager &quot;{6}&quot; --is-domain-isolated &quot;{7}&quot; --skip-cache &quot;true&quot; {8}.
+        /// </summary>
+        internal static string Yeoman_Project_CommandString_1_7 {
+            get {
+                return ResourceManager.GetString("Yeoman_Project_CommandString_1_7", resourceCulture);
             }
         }
         
