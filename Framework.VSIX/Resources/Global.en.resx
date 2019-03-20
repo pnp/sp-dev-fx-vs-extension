@@ -230,7 +230,7 @@
     <value>Properties</value>
   </data>
   <data name="Form_ShowCommandWindow" xml:space="preserve">
-    <value>Show command window (if checked, you'll need to exit manually from the command window when execution is completed)</value>
+    <value>Show command window (if checked, manually exit from command window when execution is completed)</value>
   </data>
   <data name="Form_SkipFeatureDeployment" xml:space="preserve">
     <value>Skip Feature Deployment</value>

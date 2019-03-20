@@ -107,10 +107,14 @@ namespace Framework.VSIX
             }
 
             if (SkipFeatureDeployment)
-                commandBuilder.Append(" --skip-feature-deployment");
+                commandBuilder.Append(" --skip-feature-deployment true");
+            else
+                commandBuilder.Append(" --skip-feature-deployment false");
 
             if (DomainIsolated)
-                commandBuilder.Append(" --is-domain-isolated");
+                commandBuilder.Append(" --is-domain-isolated true");
+            else
+                commandBuilder.Append(" --is-domain-isolated false");
 
             commandBuilder.Append(" --skip-cache");
 

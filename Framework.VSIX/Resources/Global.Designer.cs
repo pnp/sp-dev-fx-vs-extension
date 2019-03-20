@@ -386,7 +386,7 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show command window (if checked, you&apos;ll need to exit from command window when execution is completed).
+        ///   Looks up a localized string similar to Show command window (if checked, manually exit from command window when execution is completed).
         /// </summary>
         internal static string Form_ShowCommandWindow {
             get {
