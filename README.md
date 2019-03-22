@@ -29,7 +29,7 @@ Additional details are in the [Getting Started guide](../../wiki/Getting-Started
 
 ![SPFx Web Part Project Template in VS2017](https://github.com/SharePoint/sp-dev-fx-vs-extension/wiki/images/VS2015new.png)
 
-![Custom Project Configuration Wizard](https://github.com/SharePoint/sp-dev-fx-vs-extension/wiki/images/propertiesForm.png)
+![Custom Project Configuration Wizard](http://www.ericshupps.com/wp-content/uploads/2019/03/spfx-vs-extension-properties.png)
 
 ## Contributions
 
