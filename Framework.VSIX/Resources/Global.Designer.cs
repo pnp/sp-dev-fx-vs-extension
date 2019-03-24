@@ -71,6 +71,15 @@ namespace Framework.VSIX.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Requires version 1.8 of the SharePoint Framework Yeoman Generator.
+        /// </summary>
+        internal static string Footer_Yeoman_Version {
+            get {
+                return ResourceManager.GetString("Footer_Yeoman_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add switches and parameters to the Yeoman Generator commands..
         /// </summary>
         internal static string Form_AdvancedTab_CommandDescription {
@@ -211,6 +220,24 @@ namespace Framework.VSIX.Resources {
         internal static string Form_Item_Title {
             get {
                 return ResourceManager.GetString("Form_Item_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NOTE: If this option is unchecked, the generator will insert a string value of &quot;false&quot; into the package-soluiton.json file. You must change it manually to a boolean false value or the build task will fail..
+        /// </summary>
+        internal static string Form_Label_IsDomainIsolated_Info {
+            get {
+                return ResourceManager.GetString("Form_Label_IsDomainIsolated_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NOTE: If this option is unchecked, the generator will insert a string value of &quot;false&quot; into the package-soluiton.json file. You must change it manually to a boolean false value or the build task will fail..
+        /// </summary>
+        internal static string Form_Label_SkipFeatureDeployment_Info {
+            get {
+                return ResourceManager.GetString("Form_Label_SkipFeatureDeployment_Info", resourceCulture);
             }
         }
         

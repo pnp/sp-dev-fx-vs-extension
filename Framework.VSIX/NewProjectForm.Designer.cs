@@ -30,8 +30,11 @@ namespace Framework.VSIX
     /// </summary>
     private void InitializeComponent()
     {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewProjectForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabProps = new System.Windows.Forms.TabPage();
+            this.lblIsDomainIsolatedInfo = new System.Windows.Forms.Label();
+            this.lblSkipFeatureDeploymentInfo = new System.Windows.Forms.Label();
             this.cbxDomainIsolated = new System.Windows.Forms.CheckBox();
             this.cboPackageManager = new System.Windows.Forms.ComboBox();
             this.lblPackageManager = new System.Windows.Forms.Label();
@@ -60,9 +63,12 @@ namespace Framework.VSIX
             this.btnGenerate = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblFooter = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblYeomanVersion = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabProps.SuspendLayout();
             this.tabAdv.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -73,11 +79,13 @@ namespace Framework.VSIX
             this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(585, 505);
+            this.tabControl1.Size = new System.Drawing.Size(585, 552);
             this.tabControl1.TabIndex = 0;
             // 
             // tabProps
             // 
+            this.tabProps.Controls.Add(this.lblIsDomainIsolatedInfo);
+            this.tabProps.Controls.Add(this.lblSkipFeatureDeploymentInfo);
             this.tabProps.Controls.Add(this.cbxDomainIsolated);
             this.tabProps.Controls.Add(this.cboPackageManager);
             this.tabProps.Controls.Add(this.lblPackageManager);
@@ -102,18 +110,38 @@ namespace Framework.VSIX
             this.tabProps.Margin = new System.Windows.Forms.Padding(4, 13, 4, 13);
             this.tabProps.Name = "tabProps";
             this.tabProps.Padding = new System.Windows.Forms.Padding(4, 13, 4, 13);
-            this.tabProps.Size = new System.Drawing.Size(577, 479);
+            this.tabProps.Size = new System.Drawing.Size(577, 526);
             this.tabProps.TabIndex = 0;
             this.tabProps.Text = global::Framework.VSIX.Resources.Global.Form_PropertyTab_Title;
             this.tabProps.UseVisualStyleBackColor = true;
             // 
+            // lblIsDomainIsolatedInfo
+            // 
+            this.lblIsDomainIsolatedInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIsDomainIsolatedInfo.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.lblIsDomainIsolatedInfo.Location = new System.Drawing.Point(24, 464);
+            this.lblIsDomainIsolatedInfo.Name = "lblIsDomainIsolatedInfo";
+            this.lblIsDomainIsolatedInfo.Size = new System.Drawing.Size(520, 30);
+            this.lblIsDomainIsolatedInfo.TabIndex = 22;
+            this.lblIsDomainIsolatedInfo.Text = "label1";
+            // 
+            // lblSkipFeatureDeploymentInfo
+            // 
+            this.lblSkipFeatureDeploymentInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSkipFeatureDeploymentInfo.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.lblSkipFeatureDeploymentInfo.Location = new System.Drawing.Point(24, 376);
+            this.lblSkipFeatureDeploymentInfo.Name = "lblSkipFeatureDeploymentInfo";
+            this.lblSkipFeatureDeploymentInfo.Size = new System.Drawing.Size(520, 30);
+            this.lblSkipFeatureDeploymentInfo.TabIndex = 21;
+            this.lblSkipFeatureDeploymentInfo.Text = "label1";
+            // 
             // cbxDomainIsolated
             // 
             this.cbxDomainIsolated.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.cbxDomainIsolated.Location = new System.Drawing.Point(10, 438);
+            this.cbxDomainIsolated.Location = new System.Drawing.Point(10, 433);
             this.cbxDomainIsolated.Name = "cbxDomainIsolated";
-            this.cbxDomainIsolated.Size = new System.Drawing.Size(538, 38);
-            this.cbxDomainIsolated.TabIndex = 20;
+            this.cbxDomainIsolated.Size = new System.Drawing.Size(538, 30);
+            this.cbxDomainIsolated.TabIndex = 12;
             this.cbxDomainIsolated.Text = "domainIsolated";
             this.cbxDomainIsolated.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.cbxDomainIsolated.UseVisualStyleBackColor = true;
@@ -122,16 +150,16 @@ namespace Framework.VSIX
             // cboPackageManager
             // 
             this.cboPackageManager.FormattingEnabled = true;
-            this.cboPackageManager.Location = new System.Drawing.Point(10, 240);
+            this.cboPackageManager.Location = new System.Drawing.Point(313, 246);
             this.cboPackageManager.Name = "cboPackageManager";
             this.cboPackageManager.Size = new System.Drawing.Size(150, 21);
-            this.cboPackageManager.TabIndex = 19;
+            this.cboPackageManager.TabIndex = 7;
             this.cboPackageManager.SelectedIndexChanged += new System.EventHandler(this.cboPackageManager_SelectedIndexChanged);
             // 
             // lblPackageManager
             // 
             this.lblPackageManager.AutoSize = true;
-            this.lblPackageManager.Location = new System.Drawing.Point(13, 220);
+            this.lblPackageManager.Location = new System.Drawing.Point(316, 226);
             this.lblPackageManager.Name = "lblPackageManager";
             this.lblPackageManager.Size = new System.Drawing.Size(95, 13);
             this.lblPackageManager.TabIndex = 18;
@@ -140,10 +168,10 @@ namespace Framework.VSIX
             // cbxPlusBeta
             // 
             this.cbxPlusBeta.AutoSize = true;
-            this.cbxPlusBeta.Location = new System.Drawing.Point(321, 385);
+            this.cbxPlusBeta.Location = new System.Drawing.Point(319, 407);
             this.cbxPlusBeta.Name = "cbxPlusBeta";
             this.cbxPlusBeta.Size = new System.Drawing.Size(66, 17);
-            this.cbxPlusBeta.TabIndex = 17;
+            this.cbxPlusBeta.TabIndex = 11;
             this.cbxPlusBeta.Text = "plusbeta";
             this.cbxPlusBeta.UseVisualStyleBackColor = true;
             // 
@@ -153,7 +181,7 @@ namespace Framework.VSIX
             this.cboEnvironment.Location = new System.Drawing.Point(187, 90);
             this.cboEnvironment.Name = "cboEnvironment";
             this.cboEnvironment.Size = new System.Drawing.Size(361, 21);
-            this.cboEnvironment.TabIndex = 16;
+            this.cboEnvironment.TabIndex = 3;
             // 
             // lblEnvironment
             // 
@@ -167,25 +195,25 @@ namespace Framework.VSIX
             // cbxSkipFeatureDeployment
             // 
             this.cbxSkipFeatureDeployment.AutoSize = true;
-            this.cbxSkipFeatureDeployment.Location = new System.Drawing.Point(10, 385);
+            this.cbxSkipFeatureDeployment.Location = new System.Drawing.Point(10, 355);
             this.cbxSkipFeatureDeployment.Name = "cbxSkipFeatureDeployment";
             this.cbxSkipFeatureDeployment.Size = new System.Drawing.Size(138, 17);
-            this.cbxSkipFeatureDeployment.TabIndex = 14;
+            this.cbxSkipFeatureDeployment.TabIndex = 9;
             this.cbxSkipFeatureDeployment.Text = "skip-feature-deployment";
             this.cbxSkipFeatureDeployment.UseVisualStyleBackColor = true;
             // 
             // cboExtensionType
             // 
             this.cboExtensionType.FormattingEnabled = true;
-            this.cboExtensionType.Location = new System.Drawing.Point(10, 342);
+            this.cboExtensionType.Location = new System.Drawing.Point(10, 296);
             this.cboExtensionType.Name = "cboExtensionType";
             this.cboExtensionType.Size = new System.Drawing.Size(150, 21);
-            this.cboExtensionType.TabIndex = 12;
+            this.cboExtensionType.TabIndex = 8;
             // 
             // lblExtensionType
             // 
             this.lblExtensionType.AutoSize = true;
-            this.lblExtensionType.Location = new System.Drawing.Point(13, 322);
+            this.lblExtensionType.Location = new System.Drawing.Point(10, 276);
             this.lblExtensionType.Name = "lblExtensionType";
             this.lblExtensionType.Size = new System.Drawing.Size(83, 13);
             this.lblExtensionType.TabIndex = 11;
@@ -195,15 +223,15 @@ namespace Framework.VSIX
             // cboComponentType
             // 
             this.cboComponentType.FormattingEnabled = true;
-            this.cboComponentType.Location = new System.Drawing.Point(10, 292);
+            this.cboComponentType.Location = new System.Drawing.Point(10, 246);
             this.cboComponentType.Name = "cboComponentType";
             this.cboComponentType.Size = new System.Drawing.Size(150, 21);
-            this.cboComponentType.TabIndex = 10;
+            this.cboComponentType.TabIndex = 6;
             // 
             // lblComponentType
             // 
             this.lblComponentType.AutoSize = true;
-            this.lblComponentType.Location = new System.Drawing.Point(13, 272);
+            this.lblComponentType.Location = new System.Drawing.Point(10, 226);
             this.lblComponentType.Name = "lblComponentType";
             this.lblComponentType.Size = new System.Drawing.Size(85, 13);
             this.lblComponentType.TabIndex = 9;
@@ -212,10 +240,10 @@ namespace Framework.VSIX
             // cbxSkipInstall
             // 
             this.cbxSkipInstall.AutoSize = true;
-            this.cbxSkipInstall.Location = new System.Drawing.Point(10, 412);
+            this.cbxSkipInstall.Location = new System.Drawing.Point(10, 407);
             this.cbxSkipInstall.Name = "cbxSkipInstall";
             this.cbxSkipInstall.Size = new System.Drawing.Size(72, 17);
-            this.cbxSkipInstall.TabIndex = 8;
+            this.cbxSkipInstall.TabIndex = 10;
             this.cbxSkipInstall.Text = "skipInstall";
             this.cbxSkipInstall.UseVisualStyleBackColor = true;
             // 
@@ -224,7 +252,7 @@ namespace Framework.VSIX
             this.txtComponentDescription.Location = new System.Drawing.Point(10, 190);
             this.txtComponentDescription.Name = "txtComponentDescription";
             this.txtComponentDescription.Size = new System.Drawing.Size(538, 20);
-            this.txtComponentDescription.TabIndex = 7;
+            this.txtComponentDescription.TabIndex = 5;
             // 
             // lblComponentDescription
             // 
@@ -240,7 +268,7 @@ namespace Framework.VSIX
             this.txtComponentName.Location = new System.Drawing.Point(10, 140);
             this.txtComponentName.Name = "txtComponentName";
             this.txtComponentName.Size = new System.Drawing.Size(538, 20);
-            this.txtComponentName.TabIndex = 5;
+            this.txtComponentName.TabIndex = 4;
             // 
             // lblComponentName
             // 
@@ -258,7 +286,7 @@ namespace Framework.VSIX
             this.cboFramework.Location = new System.Drawing.Point(10, 90);
             this.cboFramework.Name = "cboFramework";
             this.cboFramework.Size = new System.Drawing.Size(150, 21);
-            this.cboFramework.TabIndex = 3;
+            this.cboFramework.TabIndex = 2;
             this.cboFramework.ValueMember = "Key";
             // 
             // lblFramework
@@ -297,7 +325,7 @@ namespace Framework.VSIX
             this.tabAdv.Margin = new System.Windows.Forms.Padding(4, 13, 4, 13);
             this.tabAdv.Name = "tabAdv";
             this.tabAdv.Padding = new System.Windows.Forms.Padding(4, 13, 4, 13);
-            this.tabAdv.Size = new System.Drawing.Size(577, 479);
+            this.tabAdv.Size = new System.Drawing.Size(577, 526);
             this.tabAdv.TabIndex = 1;
             this.tabAdv.Text = "Advanced";
             this.tabAdv.UseVisualStyleBackColor = true;
@@ -308,7 +336,7 @@ namespace Framework.VSIX
             this.cbxShowWindow.Location = new System.Drawing.Point(10, 270);
             this.cbxShowWindow.Name = "cbxShowWindow";
             this.cbxShowWindow.Size = new System.Drawing.Size(145, 17);
-            this.cbxShowWindow.TabIndex = 3;
+            this.cbxShowWindow.TabIndex = 16;
             this.cbxShowWindow.Text = "Show Command Window";
             this.cbxShowWindow.UseVisualStyleBackColor = true;
             // 
@@ -336,42 +364,72 @@ namespace Framework.VSIX
             this.txtCommandString.Multiline = true;
             this.txtCommandString.Name = "txtCommandString";
             this.txtCommandString.Size = new System.Drawing.Size(560, 200);
-            this.txtCommandString.TabIndex = 0;
+            this.txtCommandString.TabIndex = 15;
             // 
             // btnGenerate
             // 
-            this.btnGenerate.Location = new System.Drawing.Point(10, 517);
+            this.btnGenerate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGenerate.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnGenerate.Location = new System.Drawing.Point(12, 565);
+            this.btnGenerate.Margin = new System.Windows.Forms.Padding(0);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(75, 23);
-            this.btnGenerate.TabIndex = 1;
+            this.btnGenerate.TabIndex = 13;
             this.btnGenerate.Text = "Generate";
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.Generate_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(475, 517);
+            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnCancel.Location = new System.Drawing.Point(477, 565);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(0);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 2;
+            this.btnCancel.TabIndex = 14;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.Cancel_Click);
             // 
             // lblFooter
             // 
-            this.lblFooter.AutoSize = true;
-            this.lblFooter.Location = new System.Drawing.Point(10, 547);
+            this.lblFooter.Location = new System.Drawing.Point(12, 595);
             this.lblFooter.Name = "lblFooter";
-            this.lblFooter.Size = new System.Drawing.Size(47, 13);
+            this.lblFooter.Size = new System.Drawing.Size(520, 30);
             this.lblFooter.TabIndex = 3;
             this.lblFooter.Text = "lblFooter";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(12, 628);
+            this.pictureBox1.MaximumSize = new System.Drawing.Size(30, 73);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(20, 35);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            // 
+            // lblYeomanVersion
+            // 
+            this.lblYeomanVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblYeomanVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblYeomanVersion.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.lblYeomanVersion.Location = new System.Drawing.Point(37, 631);
+            this.lblYeomanVersion.Name = "lblYeomanVersion";
+            this.lblYeomanVersion.Size = new System.Drawing.Size(450, 30);
+            this.lblYeomanVersion.TabIndex = 5;
+            this.lblYeomanVersion.Text = "label1";
+            this.lblYeomanVersion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // NewProjectForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(583, 580);
+            this.ClientSize = new System.Drawing.Size(583, 684);
+            this.Controls.Add(this.lblYeomanVersion);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblFooter);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnGenerate);
@@ -385,8 +443,8 @@ namespace Framework.VSIX
             this.tabProps.PerformLayout();
             this.tabAdv.ResumeLayout(false);
             this.tabAdv.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
     }
 
@@ -422,5 +480,9 @@ namespace Framework.VSIX
         private System.Windows.Forms.ComboBox cboPackageManager;
         private System.Windows.Forms.Label lblPackageManager;
         private System.Windows.Forms.CheckBox cbxDomainIsolated;
+        private System.Windows.Forms.Label lblSkipFeatureDeploymentInfo;
+        private System.Windows.Forms.Label lblIsDomainIsolatedInfo;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label lblYeomanVersion;
     }
 }

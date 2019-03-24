@@ -128,6 +128,7 @@ namespace Framework.VSIX
 			cbxSkipFeatureDeployment.Checked = false;
 			cbxSkipFeatureDeployment.AutoSize = true;
 			cbxSkipFeatureDeployment.CheckedChanged += SkipFeatureDeployment_CheckedChanged;
+            lblSkipFeatureDeploymentInfo.Text = Global.Form_Label_SkipFeatureDeployment_Info;
 
 			// Skip NPM Install
 			cbxSkipInstall.Text = Global.Form_Prompt_SkipInstall_Label;
@@ -140,6 +141,7 @@ namespace Framework.VSIX
             cbxDomainIsolated.Checked = false;
             cbxDomainIsolated.AutoSize = false;
             cbxDomainIsolated.CheckedChanged += cbxDomainIsolated_CheckedChanged;
+            lblIsDomainIsolatedInfo.Text = Global.Form_Label_IsDomainIsolated_Info;
 
             // Beta Features
             cbxPlusBeta.Text = Global.Form_Prompt_PlusBeta_Label;
@@ -156,11 +158,19 @@ namespace Framework.VSIX
 
 			// buttons
 			btnGenerate.Text = Global.Form_ButtonGenerate;
-			btnGenerate.Enabled = commandValid;
+            btnGenerate.Enabled = commandValid;
+            if (commandValid == true)
+            {
+                btnGenerate.ForeColor = Color.White;
+                btnGenerate.BackColor = Color.Green;
+            }
 			btnCancel.Text = Global.Form_ButtonCancel;
+            btnCancel.ForeColor = Color.White;
+            btnCancel.BackColor = Color.DarkRed;
 
 			// Footer
 			lblFooter.Text = Global.Form_Footer_GeneratorText;
+            lblYeomanVersion.Text = Global.Footer_Yeoman_Version;
 
 		}
 
@@ -168,7 +178,16 @@ namespace Framework.VSIX
 
         private void SkipFeatureDeployment_CheckedChanged(object sender, EventArgs e)
 		{
-			SetCommandText();
+            if (cbxSkipFeatureDeployment.Checked)
+            {
+                lblSkipFeatureDeploymentInfo.Visible = false;
+            }
+            else
+            {
+                lblSkipFeatureDeploymentInfo.Visible = true;
+            }
+
+            SetCommandText();
 			SetSubmitState();
 		}
 
@@ -200,12 +219,14 @@ namespace Framework.VSIX
 				lblExtensionType.Visible = true;
 				cboExtensionType.Visible = true;
                 cbxDomainIsolated.Visible = false;
+                lblIsDomainIsolatedInfo.Visible = false;
 			}
 			else
 			{
 				lblExtensionType.Visible = false;
 				cboExtensionType.Visible = false;
                 cbxDomainIsolated.Visible = true;
+                lblIsDomainIsolatedInfo.Visible = true;
 			}
 			SetCommandText();
 			SetSubmitState();
@@ -260,10 +281,12 @@ namespace Framework.VSIX
             {
                 cboComponentType.SelectedValue = "webpart";
                 cboComponentType.Enabled = false;
+                lblIsDomainIsolatedInfo.Visible = false;
             }
             else
             {
                 cboComponentType.Enabled = true;
+                lblIsDomainIsolatedInfo.Visible = true;
             }
             SetCommandText();
             SetSubmitState();
@@ -276,11 +299,22 @@ namespace Framework.VSIX
 																				Environment, SkipFeatureDeployment, SkipInstall, PlusBeta, PackageManager, DomainIsolated, out commandString);
 
 			txtCommandString.Text = commandString;
+
+            if (commandValid == true)
+            {
+                btnGenerate.BackColor = Color.Green;
+                btnGenerate.ForeColor = Color.White;
+            }
 		}
 
 		protected void SetSubmitState()
 		{
 			btnGenerate.Enabled = commandValid;
+            if (commandValid ==  true)
+            {
+                btnGenerate.BackColor = Color.Green;
+                btnGenerate.ForeColor = Color.White;
+            }
 		}
 
 		private void Generate_Click(object sender, EventArgs e)

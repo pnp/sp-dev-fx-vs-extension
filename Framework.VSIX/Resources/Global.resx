@@ -121,6 +121,9 @@
   <data name="Extension" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Extension.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Footer_Yeoman_Version" xml:space="preserve">
+    <value>Requires version 1.8 of the SharePoint Framework Yeoman Generator</value>
+  </data>
   <data name="Form_AdvancedTab_CommandDescription" xml:space="preserve">
     <value>Add switches and parameters to the Yeoman Generator commands.</value>
   </data>
@@ -168,6 +171,12 @@
   </data>
   <data name="Form_Item_Title" xml:space="preserve">
     <value>SharePoint Framework Web Part Configuration</value>
+  </data>
+  <data name="Form_Label_IsDomainIsolated_Info" xml:space="preserve">
+    <value>NOTE: If this option is unchecked, the generator will insert a string value of "false" into the package-soluiton.json file. You must change it manually to a boolean false value or the build task will fail.</value>
+  </data>
+  <data name="Form_Label_SkipFeatureDeployment_Info" xml:space="preserve">
+    <value>NOTE: If this option is unchecked, the generator will insert a string value of "false" into the package-soluiton.json file. You must change it manually to a boolean false value or the build task will fail.</value>
   </data>
   <data name="Form_LogTab_Title" xml:space="preserve">
     <value>Log</value>
