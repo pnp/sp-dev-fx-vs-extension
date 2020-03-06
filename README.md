@@ -27,9 +27,11 @@ A template named 'SPFx Web Part Project' is added to the template list in Visual
 
 Additional details are in the [Getting Started guide](../../wiki/Getting-Started).
 
-![SPFx Web Part Project Template in VS2017](https://github.com/SharePoint/sp-dev-fx-vs-extension/wiki/images/VS2015new.png)
+![SPFx Web Part Project Template in VS2017/2019](https://github.com/SharePoint/sp-dev-fx-vs-extension/wiki/images/VS2015new.png)
 
 ![Custom Project Configuration Wizard](http://www.ericshupps.com/wp-content/uploads/2019/03/spfx-vs-extension-properties.png)
+
+NOTE: An issue exists in the SPFx Yeoman Generator that prevents specific values from being set as command-line arguments. The issue has been raised to the product team and [remains open](https://github.com/SharePoint/sp-dev-docs/issues/3042). Until it is fixed, we cannot resolve the problem within the extension so we have added instructions to the UI when the affected options are selected on how to supply the correct values in the generated project files.
 
 ## Contributions
 
