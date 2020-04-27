@@ -1,0 +1,12 @@
+page_type: sample
+products:
+  - office-sp
+languages:
+  - csharp
+extensions:
+  contentType: tools
+  technologies:
+    - SharePoint Framework
+  createdDate: '4/3/2017 11:06:40 AM'
+title: SPFx VS Extension
+description: Visual Studio extension work around SPFx together with community
